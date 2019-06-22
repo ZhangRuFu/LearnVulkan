@@ -1,5 +1,7 @@
 #include <Windows.h>
 
+#include "Core\WankelEngine.h"
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPreinstance, LPTSTR cmdLine, int cmdShow)
@@ -48,6 +50,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPreinstance, LPTSTR cmdLine,
 			TranslateMessage(&message);
 			DispatchMessage(&message);
 		}
+		else
+			WankelEngine::Instance()->Update();
 	}
 
 	return message.wParam;
@@ -58,19 +62,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 	case WM_DESTROY:
+		//Destroy Engine
+		WankelEngine::Destroy();
+		
 		PostQuitMessage(S_OK);
 		break;
 	case WM_CREATE:
+		//Init Engine
+		WankelEngine::Init();
 
 		break;
-
 	case WM_ERASEBKGND:
 		return 1;
-
 	case WM_PAINT:
 		ValidateRect(hwnd, nullptr);
 		break;
-
 	default:
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
