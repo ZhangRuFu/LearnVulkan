@@ -69,6 +69,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_CREATE:
 		//Init Engine
+		//TODO : How Unity do?
 		WankelEngine::Init();
 
 		break;

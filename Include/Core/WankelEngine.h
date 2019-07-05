@@ -4,7 +4,7 @@
 
 /*
  *
- *	转子引擎的核心
+ *	WankelEngine Core
  *	
 */
 

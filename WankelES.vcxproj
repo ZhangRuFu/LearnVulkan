@@ -144,14 +144,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Core\Log\Debug.cpp" />
     <ClCompile Include="Source\Core\WankelEngine.cpp" />
     <ClCompile Include="Source\Platform\Win32\WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Core\Common.h" />
+    <ClInclude Include="Include\Core\Container\String.h" />
     <ClInclude Include="Include\Core\EngineLoop.h" />
     <ClInclude Include="Include\Core\Log\Debug.h" />
+    <ClInclude Include="Include\Core\Log\LogHandler.h" />
+    <ClInclude Include="Include\Core\Log\LogManager.h" />
     <ClInclude Include="Include\Core\Misc\Singleton.h" />
     <ClInclude Include="Include\Core\WankelEngine.h" />
+    <ClInclude Include="Include\Platform\Win32\WindowsConsoleLogHandle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
