@@ -4,9 +4,9 @@ template<class T>
 class Singleton
 {
 private:
-	static T* m_instance = nullptr;
+	static T* m_instance;
 
-private:
+protected:
 	Singleton(void) {}
 
 public:
@@ -15,14 +15,15 @@ public:
 	{
 		//TODO : m_instance != nullpte Assert
 		m_instance = new T();
-		m_instance->Init();
+		m_instance->OnInit();
 	}
 	static void Destroy(void)
 	{
 		if (m_instance != nullptr)
 		{
-			m_instance->Destroy();
+			m_instance->OnDestroy();
 			delete m_instance;
+			m_instance = nullptr;
 		}
 	}
 

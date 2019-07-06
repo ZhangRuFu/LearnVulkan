@@ -2,27 +2,24 @@
 
 #include "Misc\Singleton.h"
 
+class EngineLoop;
+class LogManager;
+
 /*
  *
  *	WankelEngine Core
  *	
 */
 
-class WankelEngine : public Singleton<WankelEngine>
+template<class T>
+class WankelEngine : public Singleton<T>
 {
-public:
-	//TODO : C++11 有对 override 这种方式的支持嘛?
-	virtual void OnInit()
-	{
-		//Init Manager
-	}
+protected:
+	EngineLoop* m_engineLoop;
+	LogManager* m_logManager;
 
-	virtual void OnDestroy()
-	{
-		//Destroy Manager
-	}
-
-//To Platform Dependant
 public:
-	void Update();	//Tick
+	virtual void OnInit();
+	virtual void OnDestroy();
+	virtual void OnUpdate();
 };

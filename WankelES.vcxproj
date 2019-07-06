@@ -145,7 +145,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\Log\Debug.cpp" />
+    <ClCompile Include="Source\Core\Log\LogManager.cpp" />
+    <ClCompile Include="Source\Core\Misc\Singleton.cpp" />
+    <ClCompile Include="Source\Core\Time.cpp" />
     <ClCompile Include="Source\Core\WankelEngine.cpp" />
+    <ClCompile Include="Source\Platform\Win32\WindowsConsoleLogHandler.cpp" />
+    <ClCompile Include="Source\Platform\Win32\WindowsWankelEngine.cpp" />
     <ClCompile Include="Source\Platform\Win32\WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -156,8 +161,10 @@
     <ClInclude Include="Include\Core\Log\LogHandler.h" />
     <ClInclude Include="Include\Core\Log\LogManager.h" />
     <ClInclude Include="Include\Core\Misc\Singleton.h" />
+    <ClInclude Include="Include\Core\Time\Time.h" />
     <ClInclude Include="Include\Core\WankelEngine.h" />
-    <ClInclude Include="Include\Platform\Win32\WindowsConsoleLogHandle.h" />
+    <ClInclude Include="Include\Platform\Win32\WindowsConsoleLogHandler.h" />
+    <ClInclude Include="Include\Platform\Win32\WindowsWankelEngine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

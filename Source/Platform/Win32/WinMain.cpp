@@ -1,6 +1,8 @@
 #include <Windows.h>
 
-#include "Core\WankelEngine.h"
+#include "Platform\Win32\WindowsWankelEngine.h"
+
+WindowsWankelEngine *gWankelEngine = nullptr;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -51,7 +53,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPreinstance, LPTSTR cmdLine,
 			DispatchMessage(&message);
 		}
 		else
-			WankelEngine::Instance()->Update();
+			gWankelEngine->OnUpdate();
 	}
 
 	return message.wParam;
@@ -63,14 +65,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_DESTROY:
 		//Destroy Engine
-		WankelEngine::Destroy();
+		WindowsWankelEngine::Destroy();
 		
 		PostQuitMessage(S_OK);
 		break;
 	case WM_CREATE:
 		//Init Engine
 		//TODO : How Unity do?
-		WankelEngine::Init();
+		WindowsWankelEngine::Init();
+		gWankelEngine = WindowsWankelEngine::Instance();
 
 		break;
 	case WM_ERASEBKGND:
