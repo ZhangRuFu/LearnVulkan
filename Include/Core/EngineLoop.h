@@ -15,3 +15,15 @@ public:
 	virtual void Update() = 0;
 	virtual void Render() = 0;
 };
+
+EngineLoop* ReturnEngineLoop(void);
+
+//Choose Engine Loop
+#define GetEngineLoop() ReturnEngineLoop()
+
+//Set Engine Loop
+#define MakeEngineLoop(engineloopClass)		\
+	EngineLoop* ReturnEngineLoop(void)		\
+	{										\
+		return new engineloopClass();		\
+	};										

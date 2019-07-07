@@ -52,6 +52,7 @@ public:
 
 	void SetLogHandler(LogHandler *logHandler) { m_logHandler = logHandler; }
 
-protected:
+public:
+	virtual void OnInit(void) {}
 	virtual void OnDestroy(void);
 };

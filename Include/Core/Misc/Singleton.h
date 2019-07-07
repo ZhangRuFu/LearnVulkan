@@ -31,3 +31,6 @@ protected:
 	virtual void OnInit() = 0;
 	virtual void OnDestroy() = 0;
 };
+
+template<class T>
+T* Singleton<T>::m_instance = nullptr;

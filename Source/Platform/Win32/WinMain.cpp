@@ -36,9 +36,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPreinstance, LPTSTR cmdLine,
 	clientRect.right = 800;
 	clientRect.bottom = 800;
 	AdjustWindowRect(&clientRect, WS_OVERLAPPED, false);
-	HWND hWindow = CreateWindowW((wchar_t*)wndClassName, L"Engine", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, clientRect.right - clientRect.left, clientRect.bottom - clientRect.top, nullptr, nullptr, hInstance, nullptr);
+	HWND hWindow = CreateWindowW((wchar_t*)wndClassName, L"Wankel Engine", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, clientRect.right - clientRect.left, clientRect.bottom - clientRect.top, nullptr, nullptr, hInstance, nullptr);
 	if (hWindow == nullptr)
 		return E_FAIL;
+
+	//Init Engine
+	WindowsWankelEngine::Init();
+	gWankelEngine = WindowsWankelEngine::Instance();
+	
 
 	//Show Window
 	ShowWindow(hWindow, cmdShow);
@@ -56,7 +61,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPreinstance, LPTSTR cmdLine,
 			gWankelEngine->OnUpdate();
 	}
 
-	return message.wParam;
+	return static_cast<int>(message.wParam);
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -70,10 +75,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(S_OK);
 		break;
 	case WM_CREATE:
-		//Init Engine
-		//TODO : How Unity do?
-		WindowsWankelEngine::Init();
-		gWankelEngine = WindowsWankelEngine::Instance();
+		//Do not init engine here
+		//window can't create yet
 
 		break;
 	case WM_ERASEBKGND:

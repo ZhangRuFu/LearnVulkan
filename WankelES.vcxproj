@@ -88,11 +88,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>F:\GameDevelop\WankelES\WankelES\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\ARMES\inc;$(SolutionDir)Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)External\ARMES\lib\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libEGL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -102,12 +104,21 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>E:\Github\WankelES\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\ARMES\inc;$(SolutionDir)Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)External\ARMES\lib\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libEGL.lib;libGLESv2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>if not exist $(OutDir)libEGL.dll copy $(SolutionDir)External\ARMES\lib\libEGL.dll $(OutDir)libEGL.dll
+if not exist $(OutDir)libGLESv2.dll copy $(SolutionDir)External\ARMES\lib\libGLESv2.dll $(OutDir)libGLESv2.dll
+if not exist $(OutDir)libMaliEmulator.dll copy $(SolutionDir)External\ARMES\lib\libMaliEmulator.dll $(OutDir)libMaliEmulator.dll
+if not exist $(OutDir)log4cplus.dll copy $(SolutionDir)External\ARMES\lib\log4cplus.dll $(OutDir)log4cplus.dll
+</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -144,11 +155,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Core\Graphics\OpenGLES\ESDevice.cpp" />
     <ClCompile Include="Source\Core\Log\Debug.cpp" />
     <ClCompile Include="Source\Core\Log\LogManager.cpp" />
     <ClCompile Include="Source\Core\Misc\Singleton.cpp" />
     <ClCompile Include="Source\Core\Time.cpp" />
     <ClCompile Include="Source\Core\WankelEngine.cpp" />
+    <ClCompile Include="Source\EngineLoop\EmptyLoop.cpp" />
     <ClCompile Include="Source\Platform\Win32\WindowsConsoleLogHandler.cpp" />
     <ClCompile Include="Source\Platform\Win32\WindowsWankelEngine.cpp" />
     <ClCompile Include="Source\Platform\Win32\WinMain.cpp" />
@@ -157,6 +170,8 @@
     <ClInclude Include="Include\Core\Common.h" />
     <ClInclude Include="Include\Core\Container\String.h" />
     <ClInclude Include="Include\Core\EngineLoop.h" />
+    <ClInclude Include="Include\Core\Graphics\OpenGLES\ESDevice.h" />
+    <ClInclude Include="Include\Core\Graphics\GfxDevice.h" />
     <ClInclude Include="Include\Core\Log\Debug.h" />
     <ClInclude Include="Include\Core\Log\LogHandler.h" />
     <ClInclude Include="Include\Core\Log\LogManager.h" />
