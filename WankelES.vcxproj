@@ -71,9 +71,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\$(Configuration)\$(PlatformTarget)</OutDir>
+    <IntDir>$(SolutionDir)Build\Intermedia\$(Configuration)\$(PlatformTarget)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\$(Configuration)\$(Platform)</OutDir>
+    <IntDir>$(SolutionDir)Build\Intermedia\$(Configuration)\$(PlatformTarget)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -113,10 +117,10 @@
       <AdditionalDependencies>libEGL.lib;libGLESv2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>if not exist $(OutDir)libEGL.dll copy $(SolutionDir)External\ARMES\lib\libEGL.dll $(OutDir)libEGL.dll
-if not exist $(OutDir)libGLESv2.dll copy $(SolutionDir)External\ARMES\lib\libGLESv2.dll $(OutDir)libGLESv2.dll
-if not exist $(OutDir)libMaliEmulator.dll copy $(SolutionDir)External\ARMES\lib\libMaliEmulator.dll $(OutDir)libMaliEmulator.dll
-if not exist $(OutDir)log4cplus.dll copy $(SolutionDir)External\ARMES\lib\log4cplus.dll $(OutDir)log4cplus.dll
+      <Command>if not exist $(OutDir)libEGL.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\libEGL.dll $(OutDir)libEGL.dll
+if not exist $(OutDir)libGLESv2.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\libGLESv2.dll $(OutDir)libGLESv2.dll
+if not exist $(OutDir)libMaliEmulator.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\libMaliEmulator.dll $(OutDir)libMaliEmulator.dll
+if not exist $(OutDir)log4cplus.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\log4cplus.dll $(OutDir)log4cplus.dll
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
