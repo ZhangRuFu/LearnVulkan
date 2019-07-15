@@ -10,7 +10,8 @@ WindowsConsoleLogHandler::WindowsConsoleLogHandler()
 
 void WindowsConsoleLogHandler::Handle(const LogData& logData)
 {
-	WriteConsoleW(m_consoleOutput, logData.GetLogString().c_str(), logData.GetLogString().length(), nullptr, nullptr);
+	//No A will use wchar_t version
+	WriteConsole(m_consoleOutput, logData.GetLogString().c_str(), logData.GetLogString().length(), nullptr, nullptr);
 }
 
 WindowsConsoleLogHandler::~WindowsConsoleLogHandler(void)

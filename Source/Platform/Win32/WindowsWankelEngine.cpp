@@ -13,8 +13,8 @@ void WindowsWankelEngine::OnInit(void)
 	m_logManager->SetLogHandler(new WindowsConsoleLogHandler());
 
 	//GfxDevice Set Adreno OpenGL ES
-	m_gfxDevice = new ESDevice();
-	m_gfxDevice->Init();
+	//m_gfxDevice = new ESDevice();
+	//m_gfxDevice->Init();
 
 	NotifyEngineInitSuccess
 }

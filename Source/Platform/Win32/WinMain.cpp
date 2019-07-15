@@ -6,19 +6,19 @@ WindowsWankelEngine *gWankelEngine = nullptr;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPreinstance, LPTSTR cmdLine, int cmdShow)
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreinstance, LPSTR cmdLine, int cmdShow)
 {
-	const char16_t* wndClassName = u"WankelEngineWndClass";
+	const char* wndClassName = "WankelEngineWndClass";
 
 	//Register WndClass
-	WNDCLASSEXW wndClass = {};
+	WNDCLASSEXA wndClass = {};
 	wndClass.cbClsExtra = 0;
 	wndClass.cbWndExtra = 0;
 
-	wndClass.cbSize = sizeof(WNDCLASSEXW);
+	wndClass.cbSize = sizeof(WNDCLASSEX);
 	wndClass.hInstance = hInstance;
 	wndClass.lpszMenuName = nullptr;
-	wndClass.lpszClassName = (wchar_t*)wndClassName;
+	wndClass.lpszClassName = wndClassName;
 	wndClass.lpfnWndProc = WndProc;
 
 	wndClass.hbrBackground = nullptr;
@@ -27,7 +27,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPreinstance, LPTSTR cmdLine,
 	wndClass.hIconSm = nullptr;
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;
 	
-	ATOM wndClassID = RegisterClassExW(&wndClass);
+	ATOM wndClassID = RegisterClassEx(&wndClass);
 	if (!wndClassID)
 		return E_FAIL;
 
@@ -36,7 +36,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPreinstance, LPTSTR cmdLine,
 	clientRect.right = 800;
 	clientRect.bottom = 800;
 	AdjustWindowRect(&clientRect, WS_OVERLAPPED, false);
-	HWND hWindow = CreateWindowW((wchar_t*)wndClassName, L"Wankel Engine", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, clientRect.right - clientRect.left, clientRect.bottom - clientRect.top, nullptr, nullptr, hInstance, nullptr);
+	HWND hWindow = CreateWindow(wndClassName, "Wankel Engine", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, clientRect.right - clientRect.left, clientRect.bottom - clientRect.top, nullptr, nullptr, hInstance, nullptr);
 	if (hWindow == nullptr)
 		return E_FAIL;
 
@@ -57,8 +57,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPreinstance, LPTSTR cmdLine,
 			TranslateMessage(&message);
 			DispatchMessage(&message);
 		}
+		/*
 		else
 			gWankelEngine->OnUpdate();
+			*/
 	}
 
 	return static_cast<int>(message.wParam);
@@ -70,7 +72,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_DESTROY:
 		//Destroy Engine
-		WindowsWankelEngine::Destroy();
+		//WindowsWankelEngine::Destroy();
 		
 		PostQuitMessage(S_OK);
 		break;

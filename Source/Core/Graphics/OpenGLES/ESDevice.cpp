@@ -9,17 +9,17 @@ void ESDevice::Init()
 	m_eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 	if (m_eglDisplay == EGL_NO_DISPLAY)
 	{
-		Debug::Error(u"Can not get EGL Display");
+		Debug::Error("Can not get EGL Display");
 		return;
 	}
 
 	EGLBoolean res = eglInitialize(m_eglDisplay, &m_majorVersion, &m_minorVersion);
 	if (res == EGL_FALSE)
 	{
-		Debug::Error(u"Initialize EGL failed");
+		Debug::Error("Initialize EGL failed");
 		return;
 	}
 
-	Debug::Log(u"EGL Version: ");
+	Debug::Log("EGL Version: ");
 
 }

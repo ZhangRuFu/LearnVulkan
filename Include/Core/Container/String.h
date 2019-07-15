@@ -2,4 +2,4 @@
 
 #include <string>
 
-typedef std::u16string String;
+typedef std::string String;
