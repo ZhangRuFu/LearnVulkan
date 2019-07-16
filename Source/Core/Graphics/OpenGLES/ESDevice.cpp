@@ -4,7 +4,7 @@
 
 void ESDevice::Init()
 {
-	//eglBindAPI(EGL_OPENGL_ES_API);
+	eglBindAPI(EGL_OPENGL_ES_API);
 
 	m_eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 	if (m_eglDisplay == EGL_NO_DISPLAY)
@@ -20,6 +20,6 @@ void ESDevice::Init()
 		return;
 	}
 
-	Debug::Log("EGL Version: ");
+	Debug::Log(StringUtil::format("EGL Version: {}.{}", m_majorVersion, m_minorVersion));
 
 }

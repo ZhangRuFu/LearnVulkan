@@ -72,7 +72,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_DESTROY:
 		//Destroy Engine
-		//WindowsWankelEngine::Destroy();
+		WindowsWankelEngine::Destroy();
 		
 		PostQuitMessage(S_OK);
 		break;

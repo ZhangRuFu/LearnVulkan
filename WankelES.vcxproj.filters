@@ -45,6 +45,12 @@
     <ClCompile Include="Source\Core\Graphics\OpenGLES\ESDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="External\fmt\fmt-5.3.0\src\format.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="External\fmt\fmt-5.3.0\src\posix.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Core\EngineLoop.h">

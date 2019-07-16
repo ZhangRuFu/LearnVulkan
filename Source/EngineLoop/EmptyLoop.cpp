@@ -10,7 +10,7 @@ class EmptyEngineLoop : public EngineLoop
 public:
 	virtual void Init()
 	{
-		Debug::Log("Hello Wankel");
+		Debug::Log("Wankel Init");
 	}
 
 	virtual void Resize()
