@@ -100,6 +100,12 @@
       <AdditionalLibraryDirectories>$(SolutionDir)External\ARMES\lib\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libEGL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>if not exist $(OutDir)libEGL.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\libEGL.dll $(OutDir)libEGL.dll
+if not exist $(OutDir)libGLESv2.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\libGLESv2.dll $(OutDir)libGLESv2.dll
+if not exist $(OutDir)libMaliEmulator.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\libMaliEmulator.dll $(OutDir)libMaliEmulator.dll
+if not exist $(OutDir)log4cplus.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\log4cplus.dll $(OutDir)log4cplus.dll</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -108,7 +114,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\ARMES\inc;$(SolutionDir)Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\fmt\fmt-5.3.0\include;$(SolutionDir)External\ARMES\inc;$(SolutionDir)Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -184,6 +190,7 @@ if not exist $(OutDir)log4cplus.dll copy $(SolutionDir)External\ARMES\lib\$(Plat
     <ClInclude Include="Include\Core\Misc\Singleton.h" />
     <ClInclude Include="Include\Core\Time\Time.h" />
     <ClInclude Include="Include\Core\WankelEngine.h" />
+    <ClInclude Include="Include\Platform\Win32\WindowsCommon.h" />
     <ClInclude Include="Include\Platform\Win32\WindowsConsoleLogHandler.h" />
     <ClInclude Include="Include\Platform\Win32\WindowsWankelEngine.h" />
   </ItemGroup>

@@ -12,6 +12,7 @@ void WindowsConsoleLogHandler::Handle(const LogData& logData)
 {
 	//No A will use wchar_t version
 	WriteConsole(m_consoleOutput, logData.GetLogString().c_str(), logData.GetLogString().length(), nullptr, nullptr);
+	WriteConsole(m_consoleOutput, "\n", sizeof("\n") - 1, nullptr, nullptr);
 }
 
 WindowsConsoleLogHandler::~WindowsConsoleLogHandler(void)

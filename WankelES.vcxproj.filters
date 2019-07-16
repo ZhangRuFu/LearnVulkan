@@ -92,5 +92,8 @@
     <ClInclude Include="Include\Core\Graphics\OpenGLES\ESDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Platform\Win32\WindowsCommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

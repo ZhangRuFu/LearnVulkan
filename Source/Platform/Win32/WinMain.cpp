@@ -3,6 +3,7 @@
 #include "Platform\Win32\WindowsWankelEngine.h"
 
 WindowsWankelEngine *gWankelEngine = nullptr;
+HWND gHWND = NULL;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -39,6 +40,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreinstance, LPSTR cmdLine, i
 	HWND hWindow = CreateWindow(wndClassName, "Wankel Engine", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, clientRect.right - clientRect.left, clientRect.bottom - clientRect.top, nullptr, nullptr, hInstance, nullptr);
 	if (hWindow == nullptr)
 		return E_FAIL;
+
+	gHWND = hWindow;
 
 	//Init Engine
 	WindowsWankelEngine::Init();

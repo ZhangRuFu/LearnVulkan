@@ -2,6 +2,7 @@
 #include "Platform\Win32\WindowsConsoleLogHandler.h"
 #include "Core\Log\LogManager.h"
 #include "Core\Graphics\OpenGLES\ESDevice.h"
+#include "Platform\Win32\WindowsCommon.h"
 
 #include "../Source/Core/WankelEngine.cpp"
 
@@ -13,7 +14,7 @@ void WindowsWankelEngine::OnInit(void)
 	m_logManager->SetLogHandler(new WindowsConsoleLogHandler());
 
 	//GfxDevice Set Adreno OpenGL ES
-	m_gfxDevice = new ESDevice();
+	m_gfxDevice = new ESDevice(gHWND);
 	m_gfxDevice->Init();
 
 	NotifyEngineInitSuccess
