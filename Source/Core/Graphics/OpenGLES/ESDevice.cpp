@@ -126,3 +126,18 @@ void ESDevice::Init()
 		return;
 	}
 }
+
+void ESDevice::Destroy(void)
+{
+	eglDestroyContext(m_eglDisplay, m_eglContext);
+	eglDestroySurface(m_eglDisplay, m_eglSurface);
+
+	Debug::Log("ESDevice Destroy");
+}
+
+void ESDevice::SwapBuffer(void)
+{
+	/*TODO : Swap Interval ?*/
+	//eglSwapInterval(m_eglDisplay, 1);
+	eglSwapBuffers(m_eglDisplay, m_eglSurface);
+}

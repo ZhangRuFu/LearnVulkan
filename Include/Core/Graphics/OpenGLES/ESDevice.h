@@ -37,4 +37,6 @@ public:
 	ESDevice(EGLNativeWindowType nativeWindowType) { m_nativeWindowType = nativeWindowType; }
 
 	virtual void Init();
+	virtual void Destroy();
+	virtual void SwapBuffer();
 };
