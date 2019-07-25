@@ -28,19 +28,19 @@ Matrix4x4::Matrix4x4(const float data[16])
 
 Matrix4x4::Matrix4x4(const Matrix3x3 &other)
 {
-	m_Data[0] = other.m_Data[0];
-	m_Data[1] = other.m_Data[1];
-	m_Data[2] = other.m_Data[2];
+	m_Data[0] = other.m_data[0];
+	m_Data[1] = other.m_data[1];
+	m_Data[2] = other.m_data[2];
 	m_Data[3] = 0.0F;
 
-	m_Data[4] = other.m_Data[3];
-	m_Data[5] = other.m_Data[4];
-	m_Data[6] = other.m_Data[5];
+	m_Data[4] = other.m_data[3];
+	m_Data[5] = other.m_data[4];
+	m_Data[6] = other.m_data[5];
 	m_Data[7] = 0.0F;
 
-	m_Data[8] = other.m_Data[6];
-	m_Data[9] = other.m_Data[7];
-	m_Data[10] = other.m_Data[8];
+	m_Data[8] = other.m_data[6];
+	m_Data[9] = other.m_data[7];
+	m_Data[10] = other.m_data[8];
 	m_Data[11] = 0.0F;
 
 	m_Data[12] = 0.0F;
@@ -51,19 +51,19 @@ Matrix4x4::Matrix4x4(const Matrix3x3 &other)
 
 Matrix4x4& Matrix4x4::operator=(const Matrix3x3& other)
 {
-	m_Data[0] = other.m_Data[0];
-	m_Data[1] = other.m_Data[1];
-	m_Data[2] = other.m_Data[2];
+	m_Data[0] = other.m_data[0];
+	m_Data[1] = other.m_data[1];
+	m_Data[2] = other.m_data[2];
 	m_Data[3] = 0.0F;
 
-	m_Data[4] = other.m_Data[3];
-	m_Data[5] = other.m_Data[4];
-	m_Data[6] = other.m_Data[5];
+	m_Data[4] = other.m_data[3];
+	m_Data[5] = other.m_data[4];
+	m_Data[6] = other.m_data[5];
 	m_Data[7] = 0.0F;
 
-	m_Data[8] = other.m_Data[6];
-	m_Data[9] = other.m_Data[7];
-	m_Data[10] = other.m_Data[8];
+	m_Data[8] = other.m_data[6];
+	m_Data[9] = other.m_data[7];
+	m_Data[10] = other.m_data[8];
 	m_Data[11] = 0.0F;
 
 	m_Data[12] = 0.0F;
@@ -318,9 +318,9 @@ Matrix4x4& Matrix4x4::AdjustDepthRange(float newNear, float newFar)
 TransformType ComputeTransformType(const Matrix4x4& matrix, float epsilon)
 {
 	Vector3 outLocalScale;
-	outLocalScale.X = SqrMagnitude(matrix.GetAxisX());
-	outLocalScale.Y = SqrMagnitude(matrix.GetAxisY());
-	outLocalScale.Z = SqrMagnitude(matrix.GetAxisZ());
+	outLocalScale.X = Vector3::SqrLength(matrix.GetAxisX());
+	outLocalScale.Y = Vector3::SqrLength(matrix.GetAxisY());
+	outLocalScale.Z = Vector3::SqrLength(matrix.GetAxisZ());
 	float minAxis = std::min(std::min(outLocalScale.X, outLocalScale.Y), outLocalScale.Z);
 	float maxAxis = std::max(std::max(outLocalScale.X, outLocalScale.Y), outLocalScale.Z);
 	TransformType transType = kNoScaleTransform;
@@ -336,7 +336,7 @@ TransformType ComputeTransformType(const Matrix4x4& matrix, float epsilon)
 
 float ComputeUniformScale(const Matrix4x4& matrix)
 {
-	return Magnitude(matrix.GetAxisX());
+	return Vector3::Length(matrix.GetAxisX());
 }
 
 #define MAT(m, r, c) (m)[(c)*4+(r)]
@@ -723,9 +723,9 @@ Vector3 Matrix4x4::GetLossyScale() const
 	/* Assert(ValidTRS()); */
 
 	Vector3 result;
-	result.X = Magnitude(GetAxisX());
-	result.Y = Magnitude(GetAxisY());
-	result.Z = Magnitude(GetAxisZ());
+	result.X = Vector3::Length(GetAxisX());
+	result.Y = Vector3::Length(GetAxisY());
+	result.Z = Vector3::Length(GetAxisZ());
 
 	float determinant = Matrix3x3(*this).GetDeterminant();
 	if (determinant < 0)

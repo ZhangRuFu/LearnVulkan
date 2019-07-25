@@ -1,8 +1,6 @@
 #include "Core\Math\Vector3.h"
 #include "Core\Math\Matrix3x3.h"
 
-#define FPFIXES 1
-
 
 const float     Vector3::epsilon = 0.00001F;
 const float     Vector3::infinity = std::numeric_limits<float>::infinity();
@@ -34,29 +32,29 @@ inline Vector3 Vector3::Inverse(const Vector3 & inVec)
 	return Vector3(1.0F / inVec.X, 1.0F / inVec.Y, 1.0F / inVec.Z);
 }
 
-inline float Vector3::SqrMagnitude(const Vector3 & inV)
+inline float Vector3::SqrLength(const Vector3 & inV)
 {
 	return Dot(inV, inV);
 }
 
-inline float Vector3::Magnitude(const Vector3 & inV)
+inline float Vector3::Length(const Vector3 & inV)
 {
 	return sqrt(Dot(inV, inV));
 }
 
 inline float Vector3::Angle(const Vector3 & lhs, const Vector3 & rhs)
 {
-	return ::acos(std::min(1.0f, std::max(-1.0f, Dot(lhs, rhs) / (Magnitude(lhs) * Magnitude(rhs)))));
+	return ::acos(std::min(1.0f, std::max(-1.0f, Dot(lhs, rhs) / (Length(lhs) * Length(rhs)))));
 }
 
 inline Vector3 Vector3::Normalize(const Vector3 & inV)
 {
-	return inV / Magnitude(inV);
+	return inV / Length(inV);
 }
 
 inline Vector3 Vector3::NormalizeSafe(const Vector3 & inV, const Vector3 & defaultV)
 {
-	float mag = Magnitude(inV);
+	float mag = Length(inV);
 	if (mag > Vector3::epsilon)
 		return inV / mag;
 	else
@@ -66,7 +64,7 @@ inline Vector3 Vector3::NormalizeSafe(const Vector3 & inV, const Vector3 & defau
 // - Handles zero vector correclty
 inline Vector3 Vector3::NormalizeFast(const Vector3 & inV)
 {
-	float m = SqrMagnitude(inV);
+	float m = SqrLength(inV);
 	// GCC version of __frsqrte:
 	//  static inline double __frsqrte (double x) {
 	//      double y;
@@ -80,7 +78,7 @@ inline Vector3 Vector3::NormalizeFast(const Vector3 & inV)
 // - nan for zero vector
 inline Vector3 Vector3::NormalizeFastest(const Vector3 & inV)
 {
-	float m = SqrMagnitude(inV);
+	float m = SqrLength(inV);
 	// GCC version of __frsqrte:
 	//  static inline double __frsqrte (double x) {
 	//      double y;
@@ -140,12 +138,12 @@ inline Vector3 Vector3::Round(const Vector3 & a, float factor)
 
 inline bool Vector3::CompareApproximately(const Vector3 & inV0, const Vector3 & inV1, const float inMaxDist)
 {
-	return SqrMagnitude(inV1 - inV0) <= inMaxDist * inMaxDist;
+	return SqrLength(inV1 - inV0) <= inMaxDist * inMaxDist;
 }
 
 inline bool Vector3::IsNormalized(const Vector3 & vec, float epsilon)
 {
-	return ::CompareApproximately(SqrMagnitude(vec), 1.0f, epsilon);
+	return ::CompareApproximately(SqrLength(vec), 1.0f, epsilon);
 }
 
 void Vector3::OrthoNormalizeFast(Vector3* inU, Vector3* inV, Vector3* inW)
@@ -168,7 +166,7 @@ void Vector3::OrthoNormalizeFast(Vector3* inU, Vector3* inV, Vector3* inW)
 void Vector3::OrthoNormalize(Vector3* inU, Vector3* inV)
 {
 	// compute u0
-	float mag = Magnitude(*inU);
+	float mag = Length(*inU);
 	if (mag > Vector3::epsilon)
 		*inU /= mag;
 	else
@@ -177,7 +175,7 @@ void Vector3::OrthoNormalize(Vector3* inU, Vector3* inV)
 	// compute u1
 	float dot0 = Dot(*inU, *inV);
 	*inV -= dot0 * *inU;
-	mag = Magnitude(*inV);
+	mag = Length(*inV);
 	if (mag < Vector3::epsilon)
 		*inV = OrthoNormalVectorFast(*inU);
 	else
@@ -187,7 +185,7 @@ void Vector3::OrthoNormalize(Vector3* inU, Vector3* inV)
 void Vector3::OrthoNormalize(Vector3* inU, Vector3* inV, Vector3* inW)
 {
 	// compute u0
-	float mag = Magnitude(*inU);
+	float mag = Length(*inU);
 	if (mag > Vector3::epsilon)
 		*inU /= mag;
 	else
@@ -196,7 +194,7 @@ void Vector3::OrthoNormalize(Vector3* inU, Vector3* inV, Vector3* inW)
 	// compute u1
 	float dot0 = Dot(*inU, *inV);
 	*inV -= dot0 * *inU;
-	mag = Magnitude(*inV);
+	mag = Length(*inV);
 	if (mag > Vector3::epsilon)
 		*inV /= mag;
 	else
@@ -206,7 +204,7 @@ void Vector3::OrthoNormalize(Vector3* inU, Vector3* inV, Vector3* inW)
 	float dot1 = Dot(*inV, *inW);
 	dot0 = Dot(*inU, *inW);
 	*inW -= dot0 * *inU + dot1 * *inV;
-	mag = Magnitude(*inW);
+	mag = Length(*inW);
 	if (mag > Vector3::epsilon)
 		*inW /= mag;
 	else
@@ -214,7 +212,7 @@ void Vector3::OrthoNormalize(Vector3* inU, Vector3* inV, Vector3* inW)
 }
 
 #define k1OverSqrt2 float(0.7071067811865475244008443621048490)
-
+// Calculates a vector that is orthonormal to n, n is normalized
 Vector3 Vector3::OrthoNormalVectorFast(const Vector3& n)
 {
 	Vector3 res;
@@ -239,54 +237,22 @@ Vector3 Vector3::OrthoNormalVectorFast(const Vector3& n)
 	return res;
 }
 
-/* from chris hecker (Generates Orthonormal basis)
-void
-DextralBases(real32 const *XAxis, real32 *YAxis, real32 *ZAxis)
+// Returns a Vector3 that moves lhs towards rhs by a maximum of clampedDistance
+Vector3 Vector3::MoveTowards(const Vector3& current, const Vector3& target, float maxDistanceDelta)
 {
-real32 CrossVector[3] = {1.0f, 1.0f, 1.0f};
-
-real32 MaximumElement = 0.0f;
-
-int MaximumElementIndex = 0;
-{for(int ElementIndex = 0;
-ElementIndex < 3;
-++ElementIndex)
-{
-real32 ElementValue = AbsoluteValue(XAxis[ElementIndex]);
-if(ElementValue > MaximumElement)
-{
-MaximumElement = ElementValue;
-MaximumElementIndex = ElementIndex;
-}
-}}
-
-CrossVector[MaximumElementIndex] = 0.0f;
-
-VectorCrossProduct3(YAxis, CrossVector, XAxis);
-Normalize3(YAxis);
-
-VectorCrossProduct3(ZAxis, XAxis, YAxis);
-Normalize3(ZAxis);
-}
-
-*/
-
-/// Returns a Vector3 that moves lhs towards rhs by a maximum of clampedDistance
-Vector3 Vector3::MoveTowards(const Vector3& lhs, const Vector3& rhs, float clampedDistance)
-{
-	Vector3 delta = rhs - lhs;
-	float sqrDelta = SqrMagnitude(delta);
-	float sqrClampedDistance = clampedDistance * clampedDistance;
-	if (sqrDelta > sqrClampedDistance)
+	Vector3 delta = target - current;
+	float sqrDelta = SqrLength(delta);
+	float sqrMaxDistanceDelta = maxDistanceDelta * maxDistanceDelta;
+	if (sqrDelta > sqrMaxDistanceDelta)
 	{
 		float deltaMag = sqrt(sqrDelta);
 		if (deltaMag > Vector3::epsilon)
-			return lhs + delta / deltaMag * clampedDistance;
+			return current + delta / deltaMag * maxDistanceDelta;
 		else
-			return lhs;
+			return current;	//too short
 	}
 	else
-		return rhs;
+		return target;
 }
 
 static inline float ClampedMove(float lhs, float rhs, float clampedDelta)
@@ -298,56 +264,58 @@ static inline float ClampedMove(float lhs, float rhs, float clampedDelta)
 		return lhs - std::min(-delta, clampedDelta);
 }
 
-Vector3 Vector3::RotateTowards(const Vector3& lhs, const Vector3& rhs, float angleMove, float magnitudeMove)
+Vector3 Vector3::RotateTowards(const Vector3& current, const Vector3& target, float angleMove, float lengthMove)
 {
-	float lhsMag = Magnitude(lhs);
-	float rhsMag = Magnitude(rhs);
+	float curLength = Length(current);
+	float targetLength = Length(target);
 
 	// both vectors are non-zero
-	if (lhsMag > Vector3::epsilon && rhsMag > Vector3::epsilon)
+	if (curLength > Vector3::epsilon && targetLength > Vector3::epsilon)
 	{
-		Vector3 lhsNorm = lhs / lhsMag;
-		Vector3 rhsNorm = rhs / rhsMag;
+		Vector3 curNorm = current / curLength;
+		Vector3 targetNorm = target / targetLength;
 
-		float dot = Dot(lhsNorm, rhsNorm);
-		// direction is almost the same
+		float dot = Dot(curNorm, targetNorm);
+		// angle is almost the same
 		if (dot > 1.0F - Vector3::epsilon)
-		{
-			return MoveTowards(lhs, rhs, magnitudeMove);
-		}
+			return MoveTowards(current, target, lengthMove);	//fall back
 		// directions are almost opposite
 		else if (dot < -1.0F + Vector3::epsilon)
 		{
-			Vector3 axis = OrthoNormalVectorFast(lhsNorm);
+			//cross will get small result to error
+			Vector3 axis = OrthoNormalVectorFast(curNorm);
 			Matrix3x3 m;
 			m.SetAxisAngle(axis, angleMove);
-			Vector3 rotated = m.MultiplyPoint3(lhsNorm);
-			rotated *= ClampedMove(lhsMag, rhsMag, magnitudeMove);
+			Vector3 rotated = m.MultiplyPoint3(curNorm);
+			rotated *= ClampedMove(curLength, targetLength, lengthMove);
 			return rotated;
 		}
 		// normal case
 		else
 		{
 			float angle = std::acos(dot);
-			Vector3 axis = Normalize(Cross(lhsNorm, rhsNorm));
+			Vector3 axis = Normalize(Cross(curNorm, targetNorm));
 			Matrix3x3 m;
 			m.SetAxisAngle(axis, std::min(angleMove, angle));
-			Vector3 rotated = m.MultiplyPoint3(lhsNorm);
-			rotated *= ClampedMove(lhsMag, rhsMag, magnitudeMove);
+			Vector3 rotated = m.MultiplyPoint3(curNorm);
+			rotated *= ClampedMove(curLength, targetLength, lengthMove);
 			return rotated;
 		}
 	}
-	// at least one of the vectors is almost zero
 	else
 	{
-		return MoveTowards(lhs, rhs, magnitudeMove);
+		//fall back
+		return MoveTowards(current, target, lengthMove);
 	}
 }
 
+// angle : linear
+// len : linear
+//final vector = angle - len
 Vector3 Vector3::Slerp(const Vector3& lhs, const Vector3& rhs, float t)
 {
-	float lhsMag = Magnitude(lhs);
-	float rhsMag = Magnitude(rhs);
+	float lhsMag = Length(lhs);
+	float rhsMag = Length(rhs);
 
 	if (lhsMag < Vector3::epsilon || rhsMag < Vector3::epsilon)
 		return Lerp(lhs, rhs, t);
@@ -385,110 +353,4 @@ Vector3 Vector3::Slerp(const Vector3& lhs, const Vector3& rhs, float t)
 		slerped *= lerpedMagnitude;
 		return slerped;
 	}
-}
-
-inline static Vector3 NormalizeRobustInternal(const Vector3& a, float &l, float &div, float eps)
-{
-	float a0, a1, a2, aa0, aa1, aa2;
-	a0 = a[0];
-	a1 = a[1];
-	a2 = a[2];
-
-#if FPFIXES
-	if (CompareApproximately(a0, 0.0F, eps))
-		a0 = aa0 = 0;
-	else
-#endif
-	{
-		aa0 = abs(a0);
-	}
-
-#if FPFIXES
-	if (CompareApproximately(a1, 0.0F, eps))
-		a1 = aa1 = 0;
-	else
-#endif
-	{
-		aa1 = abs(a1);
-	}
-
-#if FPFIXES
-	if (CompareApproximately(a2, 0.0F, eps))
-		a2 = aa2 = 0;
-	else
-#endif
-	{
-		aa2 = abs(a2);
-	}
-
-	if (aa1 > aa0)
-	{
-		if (aa2 > aa1)
-		{
-			a0 /= aa2;
-			a1 /= aa2;
-			l = InvSqrt(a0 * a0 + a1 * a1 + 1.0F);
-			div = aa2;
-			return Vector3(a0 * l, a1 * l, CopySignf(l, a2));
-		}
-		else
-		{
-			// aa1 is largest
-			a0 /= aa1;
-			a2 /= aa1;
-			l = InvSqrt(a0 * a0 + a2 * a2 + 1.0F);
-			div = aa1;
-			return Vector3(a0 * l, CopySignf(l, a1), a2 * l);
-		}
-	}
-	else
-	{
-		if (aa2 > aa0)
-		{
-			// aa2 is largest
-			a0 /= aa2;
-			a1 /= aa2;
-			l = InvSqrt(a0 * a0 + a1 * a1 + 1.0F);
-			div = aa2;
-			return Vector3(a0 * l, a1 * l, CopySignf(l, a2));
-		}
-		else
-		{
-			// aa0 is largest
-			if (aa0 <= 0)
-			{
-				l = 0;
-				div = 1;
-				return Vector3(0.0F, 1.0F, 0.0F);
-			}
-
-			a1 /= aa0;
-			a2 /= aa0;
-			l = InvSqrt(a1 * a1 + a2 * a2 + 1.0F);
-			div = aa0;
-			return Vector3(CopySignf(l, a0), a1 * l, a2 * l);
-		}
-	}
-}
-
-Vector3 Vector3::NormalizeRobust(const Vector3& a)
-{
-	float l, div;
-	return NormalizeRobustInternal(a, l, div, Vector3::epsilon);
-}
-
-Vector3 Vector3::NormalizeRobust(const Vector3& a, float &invOriginalLength, float eps)
-{
-	float l, div;
-	const Vector3 &n = NormalizeRobustInternal(a, l, div, eps);
-	invOriginalLength = l / div;
-	// guard for NaNs
-	/* TODO : Assert */
-	/*
-	Assert(n == n);
-	Assert(invOriginalLength == invOriginalLength);
-	Assert(IsNormalized(n));
-	*/
-
-	return n;
 }

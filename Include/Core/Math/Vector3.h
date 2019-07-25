@@ -40,8 +40,8 @@ public:
 	static inline float Dot(const Vector3& lhs, const Vector3& rhs);
 	static inline float Volume(const Vector3& inV);
 	static inline Vector3 Inverse(const Vector3& inVec);
-	static inline float SqrMagnitude(const Vector3& inV);
-	static inline float Magnitude(const Vector3& inV);
+	static inline float SqrLength(const Vector3& inV);
+	static inline float Length(const Vector3& inV);
 	static inline float Angle(const Vector3& lhs, const Vector3& rhs);
 	static inline Vector3 Normalize(const Vector3& inV);
 	static inline Vector3 NormalizeSafe(const Vector3& inV, const Vector3& defaultV = Vector3::zero);
@@ -50,51 +50,28 @@ public:
 	static inline Vector3 Cross(const Vector3& lhs, const Vector3& rhs);
 	static inline Vector3 ReflectVector(const Vector3& inDirection, const Vector3& inNormal);
 	static inline Vector3 Lerp(const Vector3& from, const Vector3& to, float t);
+	static Vector3 Slerp(const Vector3& from, const Vector3& to, float t);
 	static inline Vector3 Min(const Vector3& lhs, const Vector3& rhs);
 	static inline Vector3 Max(const Vector3& lhs, const Vector3& rhs);
 	static inline Vector3 Project(const Vector3& v1, const Vector3& v2);
 	static inline Vector3 Abs(const Vector3& v);
 	static inline bool IsFinite(const Vector3& f);
 	static inline Vector3 Round(const Vector3& a, float factor);
+	
 
 	static inline bool CompareApproximately(const Vector3& inV0, const Vector3& inV1, const float inMaxDist = Vector3::epsilon);
 	static inline bool IsNormalized(const Vector3& vec, float epsilon = Vector3::epsilon);
 
-	// Orthonormalizes the three vectors, assuming that a orthonormal basis can be formed
-	static void OrthoNormalizeFast(Vector3* inU, Vector3* inV, Vector3* inW);
-	// Orthonormalizes the three vectors, returns false if no orthonormal basis could be formed.
+	//orthogonalization
+	//select first vector be base
+	static void OrthoNormalizeFast(Vector3* inU, Vector3* inV, Vector3* inW);	//no len judge
 	static void OrthoNormalize(Vector3* inU, Vector3* inV, Vector3* inW);
-	// Orthonormalizes the two vectors. inV is taken as a hint and will try to be as close as possible to inV.
 	static void OrthoNormalize(Vector3* inU, Vector3* inV);
-
-	// Calculates a vector that is orthonormal to n.
-	// Assumes that n is normalized
 	static Vector3 OrthoNormalVectorFast(const Vector3& n);
 
-	// Rotates lhs towards rhs by no more than max Angle
-	// Moves the magnitude of lhs towards rhs by no more than maxMagnitude
-	static Vector3 RotateTowards(const Vector3& lhs, const Vector3& rhs, float maxAngle, float maxMagnitude);
-
-	// Spherically interpolates the direction of two vectors
-	// and interpolates the magnitude of the two vectors
-	static Vector3 Slerp(const Vector3& lhs, const Vector3& rhs, float t);
-
-	// Returns a Vector3 that moves lhs towards rhs by a maximum of clampedDistance
-	static Vector3 MoveTowards(const Vector3& lhs, const Vector3& rhs, float clampedDistance);
-
-
-	// this may be called for vectors `a' with extremely small magnitude, for
-	// example the result of a cross product on two nearly perpendicular vectors.
-	// we must be robust to these small vectors. to prevent numerical error,
-	// first find the component a[i] with the largest magnitude and then scale
-	// all the components by 1/a[i]. then we can compute the length of `a' and
-	// scale the components by 1/l. this has been verified to work with vectors
-	// containing the smallest representable numbers.
-	static Vector3 NormalizeRobust(const Vector3& a);
-	// This also returns vector's inverse original length, to avoid duplicate
-	// invSqrt calculations when needed. If a is a zero vector, invOriginalLength will be 0.
-	static Vector3 NormalizeRobust(const Vector3& a, float &invOriginalLength, float eps = Vector3::epsilon);
-
+	static Vector3 MoveTowards(const Vector3& current, const Vector3& target, float maxDistance);
+	static Vector3 RotateTowards(const Vector3& current, const Vector3& target, float maxAngle, float maxMagnitude);
+	
 public:
 	static const float epsilon;
 	static const float infinity;

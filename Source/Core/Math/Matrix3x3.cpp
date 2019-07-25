@@ -3,14 +3,14 @@
 
 namespace
 {
-	Matrix3x3 CreateIdentityMatrix3x3f()
+	Matrix3x3 CreateIdentityMatrix3x3()
 	{
 		Matrix3x3 temp;
 		temp.SetIdentity();
 		return temp;
 	}
 
-	Matrix3x3 CreateZeroMatrix3x3f()
+	Matrix3x3 CreateZeroMatrix3x3()
 	{
 		Matrix3x3 temp;
 		temp.SetZero();
@@ -18,41 +18,68 @@ namespace
 	}
 }
 
-const Matrix3x3 Matrix3x3::identity = CreateIdentityMatrix3x3f();
-const Matrix3x3 Matrix3x3::zero = CreateZeroMatrix3x3f();
+const Matrix3x3 Matrix3x3::identity = CreateIdentityMatrix3x3();
+const Matrix3x3 Matrix3x3::zero = CreateZeroMatrix3x3();
 
 void GetRotMatrixNormVec(float* out, const float* inVec, float radians);
 
-Matrix3x3& Matrix3x3::operator=(const Matrix4x4& other)
+inline Vector3 Matrix3x3::MultiplyVector3(const Vector3& v) const
 {
-	m_Data[0] = other.m_Data[0];
-	m_Data[1] = other.m_Data[1];
-	m_Data[2] = other.m_Data[2];
+	Vector3 res;
+	res.X = m_data[0] * v.X + m_data[3] * v.Y + m_data[6] * v.Z;
+	res.Y = m_data[1] * v.X + m_data[4] * v.Y + m_data[7] * v.Z;
+	res.Z = m_data[2] * v.X + m_data[5] * v.Y + m_data[8] * v.Z;
+	return res;
+}
 
-	m_Data[3] = other.m_Data[4];
-	m_Data[4] = other.m_Data[5];
-	m_Data[5] = other.m_Data[6];
+inline void Matrix3x3::MultiplyVector3(const Vector3& v, Vector3& output) const
+{
+	output.X = m_data[0] * v.X + m_data[3] * v.Y + m_data[6] * v.Z;
+	output.Y = m_data[1] * v.X + m_data[4] * v.Y + m_data[7] * v.Z;
+	output.Z = m_data[2] * v.X + m_data[5] * v.Y + m_data[8] * v.Z;
+}
 
-	m_Data[6] = other.m_Data[8];
-	m_Data[7] = other.m_Data[9];
-	m_Data[8] = other.m_Data[10];
+inline Vector3 Matrix3x3::MultiplyVector3Transpose(const Vector3& v) const
+{
+	Vector3 res;
+	res.X = Get(0, 0) * v.X + Get(1, 0) * v.Y + Get(2, 0) * v.Z;
+	res.Y = Get(0, 1) * v.X + Get(1, 1) * v.Y + Get(2, 1) * v.Z;
+	res.Z = Get(0, 2) * v.X + Get(1, 2) * v.Y + Get(2, 2) * v.Z;
+	return res;
+}
+
+
+Matrix3x3& Matrix3x3::operator=(const Matrix4x4& mat4)
+{
+	m_data[0] = mat4.m_Data[0];
+	m_data[1] = mat4.m_Data[1];
+	m_data[2] = mat4.m_Data[2];
+
+	m_data[3] = mat4.m_Data[4];
+	m_data[4] = mat4.m_Data[5];
+	m_data[5] = mat4.m_Data[6];
+
+	m_data[6] = mat4.m_Data[8];
+	m_data[7] = mat4.m_Data[9];
+	m_data[8] = mat4.m_Data[10];
 	return *this;
 }
 
-Matrix3x3::Matrix3x3(const Matrix4x4& other)
+Matrix3x3::Matrix3x3(const Matrix4x4& mat4)
 {
-	m_Data[0] = other.m_Data[0];
-	m_Data[1] = other.m_Data[1];
-	m_Data[2] = other.m_Data[2];
+	m_data[0] = mat4.m_Data[0];
+	m_data[1] = mat4.m_Data[1];
+	m_data[2] = mat4.m_Data[2];
 
-	m_Data[3] = other.m_Data[4];
-	m_Data[4] = other.m_Data[5];
-	m_Data[5] = other.m_Data[6];
+	m_data[3] = mat4.m_Data[4];
+	m_data[4] = mat4.m_Data[5];
+	m_data[5] = mat4.m_Data[6];
 
-	m_Data[6] = other.m_Data[8];
-	m_Data[7] = other.m_Data[9];
-	m_Data[8] = other.m_Data[10];
+	m_data[6] = mat4.m_Data[8];
+	m_data[7] = mat4.m_Data[9];
+	m_data[8] = mat4.m_Data[10];
 }
+
 
 Matrix3x3& Matrix3x3::SetIdentity()
 {
@@ -70,6 +97,7 @@ Matrix3x3& Matrix3x3::SetZero()
 	return *this;
 }
 
+
 Matrix3x3& Matrix3x3::SetBasis(const Vector3& inX, const Vector3& inY, const Vector3& inZ)
 {
 	Get(0, 0) = inX[0];    Get(0, 1) = inY[0];    Get(0, 2) = inZ[0];
@@ -86,21 +114,13 @@ Matrix3x3& Matrix3x3::SetBasisTransposed(const Vector3& inX, const Vector3& inY,
 	return *this;
 }
 
+
 Matrix3x3& Matrix3x3::SetScale(const Vector3& inScale)
 {
 	Get(0, 0) = inScale[0];    Get(0, 1) = 0.0F;          Get(0, 2) = 0.0F;
 	Get(1, 0) = 0.0F;          Get(1, 1) = inScale[1];    Get(1, 2) = 0.0F;
 	Get(2, 0) = 0.0F;          Get(2, 1) = 0.0F;          Get(2, 2) = inScale[2];
 	return *this;
-}
-
-bool Matrix3x3::IsIdentity(float threshold)
-{
-	if (CompareApproximately(Get(0, 0), 1.0f, threshold) && CompareApproximately(Get(0, 1), 0.0f, threshold) && CompareApproximately(Get(0, 2), 0.0f, threshold) &&
-		CompareApproximately(Get(1, 0), 0.0f, threshold) && CompareApproximately(Get(1, 1), 1.0f, threshold) && CompareApproximately(Get(1, 2), 0.0f, threshold) &&
-		CompareApproximately(Get(2, 0), 0.0f, threshold) && CompareApproximately(Get(2, 1), 0.0f, threshold) && CompareApproximately(Get(2, 2), 1.0f, threshold))
-		return true;
-	return false;
 }
 
 Matrix3x3& Matrix3x3::Scale(const Vector3& inScale)
@@ -118,6 +138,17 @@ Matrix3x3& Matrix3x3::Scale(const Vector3& inScale)
 	Get(2, 2) *= inScale[2];
 	return *this;
 }
+
+
+bool Matrix3x3::IsIdentity(float threshold)
+{
+	if (CompareApproximately(Get(0, 0), 1.0f, threshold) && CompareApproximately(Get(0, 1), 0.0f, threshold) && CompareApproximately(Get(0, 2), 0.0f, threshold) &&
+		CompareApproximately(Get(1, 0), 0.0f, threshold) && CompareApproximately(Get(1, 1), 1.0f, threshold) && CompareApproximately(Get(1, 2), 0.0f, threshold) &&
+		CompareApproximately(Get(2, 0), 0.0f, threshold) && CompareApproximately(Get(2, 1), 0.0f, threshold) && CompareApproximately(Get(2, 2), 1.0f, threshold))
+		return true;
+	return false;
+}
+
 
 float Matrix3x3::GetDeterminant() const
 {
@@ -139,20 +170,6 @@ Matrix3x3& Matrix3x3::Transpose()
 	std::swap(Get(2, 1), Get(1, 2));
 	return *this;
 }
-
-/*
-Matrix3x3f& Matrix3x3f::Transpose (const Matrix3x3f& inMat)
-{
-int i;
-for (i=0;i<3;i++)
-{
-Get (i, 0) = inMat.Get (0, i);
-Get (i, 1) = inMat.Get (1, i);
-Get (i, 2) = inMat.Get (2, i);
-}
-return *this;
-}
-*/
 
 bool Matrix3x3::Invert()
 {
@@ -204,7 +221,7 @@ void Matrix3x3::InvertTranspose()
 Matrix3x3& Matrix3x3::operator*=(float f)
 {
 	for (int i = 0; i < 9; i++)
-		m_Data[i] *= f;
+		m_data[i] *= f;
 	return *this;
 }
 
@@ -236,7 +253,7 @@ Matrix3x3& Matrix3x3::operator*=(const Matrix4x4& inM)
 
 Matrix3x3& Matrix3x3::SetAxisAngle(const Vector3& rotationAxis, float radians)
 {
-	GetRotMatrixNormVec(m_Data, rotationAxis.GetPtr(), radians);
+	GetRotMatrixNormVec(m_data, rotationAxis.GetPtr(), radians);
 	return *this;
 }
 
@@ -271,8 +288,8 @@ void EulerToMatrix(const Vector3& v, Matrix3x3& matrix)
 */
 Matrix3x3& Matrix3x3::SetFromToRotation(const Vector3& from, const Vector3& to)
 {
-	Vector3 v = Cross(from, to);
-	float e = Dot(from, to);
+	Vector3 v = Vector3::Cross(from, to);
+	float e = Vector3::Dot(from, to);
 	const float kEpsilon = 0.000001f;
 	if (e > 1.0 - kEpsilon)     /* "from" almost or equal to "to"-vector? */
 	{
@@ -289,17 +306,17 @@ Matrix3x3& Matrix3x3::SetFromToRotation(const Vector3& from, const Vector3& to)
 		float lxx, lyy, lzz, lxy, lxz, lyz;
 		/* left=CROSS(from, (1,0,0)) */
 		Vector3 left(0.0f, from[2], -from[1]);
-		if (Dot(left, left) < kEpsilon) /* was left=CROSS(from,(1,0,0)) a good choice? */
+		if (Vector3::Dot(left, left) < kEpsilon) /* was left=CROSS(from,(1,0,0)) a good choice? */
 		{
 			/* here we now that left = CROSS(from, (1,0,0)) will be a good choice */
 			left[0] = -from[2]; left[1] = 0.0; left[2] = from[0];
 		}
 		/* normalize "left" */
-		invlen = 1.0f / std::sqrt(Dot(left, left));
+		invlen = 1.0f / std::sqrt(Vector3::Dot(left, left));
 		left[0] *= invlen;
 		left[1] *= invlen;
 		left[2] *= invlen;
-		Vector3 up = Cross(left, from);
+		Vector3 up = Vector3::Cross(left, from);
 		/* now we have a coordinate system, i.e., a basis;    */
 		/* M=(from, up, left), and we want to rotate to:      */
 		/* N=(-from, up, -left). This is done with the matrix:*/
@@ -321,7 +338,7 @@ Matrix3x3& Matrix3x3::SetFromToRotation(const Vector3& from, const Vector3& to)
 	{
 		/* ...otherwise use this hand optimized version (9 mults less) */
 		float hvx, hvz, hvxy, hvxz, hvyz;
-		float h = (1.0f - e) / Dot(v, v);
+		float h = (1.0f - e) / Vector3::Dot(v, v);
 		hvx = h * v[0];
 		hvz = h * v[2];
 		hvxy = hvx * v[1];
@@ -339,7 +356,7 @@ bool LookRotationToMatrix(const Vector3& viewVec, const Vector3& upVec, Matrix3x
 {
 	Vector3 z = viewVec;
 	// compute u0
-	float mag = Magnitude(z);
+	float mag = Vector3::Length(z);
 	if (mag < Vector3::epsilon)
 	{
 		m->SetIdentity();
@@ -347,8 +364,8 @@ bool LookRotationToMatrix(const Vector3& viewVec, const Vector3& upVec, Matrix3x
 	}
 	z /= mag;
 
-	Vector3 x = Cross(upVec, z);
-	mag = Magnitude(x);
+	Vector3 x = Vector3::Cross(upVec, z);
+	mag = Vector3::Length(x);
 	if (mag < Vector3::epsilon)
 	{
 		m->SetIdentity();
@@ -356,8 +373,8 @@ bool LookRotationToMatrix(const Vector3& viewVec, const Vector3& upVec, Matrix3x
 	}
 	x /= mag;
 
-	Vector3 y(Cross(z, x));
-	if (!CompareApproximately(SqrMagnitude(y), 1.0F))
+	Vector3 y(Vector3::Cross(z, x));
+	if (!CompareApproximately(Vector3::SqrLength(y), 1.0F))
 		return false;
 
 	m->SetBasis(x, y, z);
@@ -489,5 +506,5 @@ void OrthoNormalize(Matrix3x3& matrix)
 	Vector3* c0 = (Vector3*)matrix.GetPtr() + 0;
 	Vector3* c1 = (Vector3*)matrix.GetPtr() + 3;
 	Vector3* c2 = (Vector3*)matrix.GetPtr() + 6;
-	OrthoNormalize(c0, c1, c2);
+	Vector3::OrthoNormalize(c0, c1, c2);
 }

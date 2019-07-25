@@ -313,7 +313,7 @@ inline Quaternionf AxisAngleToQuaternion(const Vector3& axis, float angle)
 
 inline Quaternionf AngularVelocityToQuaternion(const Vector3& axis, float deltaTime)
 {
-	float w = Magnitude(axis);
+	float w = Vector3::Length(axis);
 	if (w > Vector3::epsilon)
 	{
 		float v = deltaTime * w * 0.5f;
@@ -337,7 +337,7 @@ inline Quaternionf AngularVelocityToQuaternion(const Vector3& axis, float deltaT
 inline Quaternionf AxisAngleToQuaternionSafe(const Vector3& axis, float angle)
 {
 	Quaternionf q;
-	float mag = Magnitude(axis);
+	float mag = Vector3::Length(axis);
 	if (mag > 0.000001F)
 	{
 		float halfAngle = angle * 0.5F;

@@ -412,15 +412,6 @@ inline Vector3 Matrix4x4::InverseMultiplyVector3Affine(const Vector3& v) const
 	return res;
 }
 
-template<class TransferFunction> inline
-void Matrix4x4::Transfer(TransferFunction& t)
-{
-	t.Transfer(Get(0, 0), "e00"); t.Transfer(Get(0, 1), "e01"); t.Transfer(Get(0, 2), "e02"); t.Transfer(Get(0, 3), "e03");
-	t.Transfer(Get(1, 0), "e10"); t.Transfer(Get(1, 1), "e11"); t.Transfer(Get(1, 2), "e12"); t.Transfer(Get(1, 3), "e13");
-	t.Transfer(Get(2, 0), "e20"); t.Transfer(Get(2, 1), "e21"); t.Transfer(Get(2, 2), "e22"); t.Transfer(Get(2, 3), "e23");
-	t.Transfer(Get(3, 0), "e30"); t.Transfer(Get(3, 1), "e31"); t.Transfer(Get(3, 2), "e32"); t.Transfer(Get(3, 3), "e33");
-}
-
 inline bool IsFinite(const Matrix4x4& f)
 {
 	return

@@ -346,17 +346,17 @@ void QuaternionToMatrix(const Quaternionf& q, Matrix3x3& m)
 	float wz = q.w * z;
 
 	// Calculate 3x3 matrix from orthonormal basis
-	m.m_Data[0] = 1.0f - (yy + zz);
-	m.m_Data[1] = xy + wz;
-	m.m_Data[2] = xz - wy;
+	m.m_data[0] = 1.0f - (yy + zz);
+	m.m_data[1] = xy + wz;
+	m.m_data[2] = xz - wy;
 
-	m.m_Data[3] = xy - wz;
-	m.m_Data[4] = 1.0f - (xx + zz);
-	m.m_Data[5] = yz + wx;
+	m.m_data[3] = xy - wz;
+	m.m_data[4] = 1.0f - (xx + zz);
+	m.m_data[5] = yz + wx;
 
-	m.m_Data[6] = xz + wy;
-	m.m_Data[7] = yz - wx;
-	m.m_Data[8] = 1.0f - (xx + yy);
+	m.m_data[6] = xz + wy;
+	m.m_data[7] = yz - wx;
+	m.m_data[8] = 1.0f - (xx + yy);
 }
 
 void QuaternionToMatrix(const Quaternionf& q, Matrix4x4& m)
@@ -472,8 +472,8 @@ bool LookRotationToQuaternion(const Vector3& viewVec, const Vector3& upVec, Quat
 
 Quaternionf FromToQuaternionSafe(const Vector3& lhs, const Vector3& rhs)
 {
-	float lhsMag = Magnitude(lhs);
-	float rhsMag = Magnitude(rhs);
+	float lhsMag = Vector3::Length(lhs);
+	float rhsMag = Vector3::Length(rhs);
 	if (lhsMag < Vector3::epsilon || rhsMag < Vector3::epsilon)
 		return Quaternionf::identity();
 	else
