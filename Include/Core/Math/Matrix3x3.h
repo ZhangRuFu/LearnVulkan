@@ -58,7 +58,7 @@ public:
 	Vector3 MultiplyVector3(const Vector3& inV) const;
 	void MultiplyVector3(const Vector3& inV, Vector3& output) const;
 
-	Vector3 MultiplyPoint3(const Vector3& inV) const { return MultiplyVector3(inV); }
+	Vector3 MultiplyPoint3(const Vector3& inV) const;
 	Vector3 MultiplyVector3Transpose(const Vector3& inV) const;
 	Vector3 MultiplyPoint3Transpose(const Vector3& inV) const { return MultiplyVector3Transpose(inV); }
 

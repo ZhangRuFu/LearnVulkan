@@ -18,58 +18,265 @@
 #define PP_WRAP_CODE(CODE_) \
     do { CODE_; } while (0)
 
-const Matrix4x4 Matrix4x4::identity(kIdentity);
+const Matrix4x4 Matrix4x4::identity(Identity);
+
+inline Matrix4x4::Matrix4x4(const Matrix4x4 &other)
+{
+	CopyMatrix4x4(other.GetPtr(), GetPtr());
+}
+
+inline Matrix4x4& Matrix4x4::operator=(const Matrix4x4& m)
+{
+	CopyMatrix4x4(m.GetPtr(), GetPtr());
+	return *this;
+}
+
+inline Vector3 Matrix4x4::GetAxisX() const
+{
+	return Vector3(Get(0, 0), Get(1, 0), Get(2, 0));
+}
+
+inline Vector3 Matrix4x4::GetAxisY() const
+{
+	return Vector3(Get(0, 1), Get(1, 1), Get(2, 1));
+}
+
+inline Vector3 Matrix4x4::GetAxisZ() const
+{
+	return Vector3(Get(0, 2), Get(1, 2), Get(2, 2));
+}
+
+inline Vector3 Matrix4x4::GetAxis(int axis) const
+{
+	return Vector3(Get(0, axis), Get(1, axis), Get(2, axis));
+}
+
+inline Vector3 Matrix4x4::GetPosition() const
+{
+	return Vector3(Get(0, 3), Get(1, 3), Get(2, 3));
+}
+
+inline Vector4 Matrix4x4::GetRow(int row) const
+{
+	return Vector4(Get(row, 0), Get(row, 1), Get(row, 2), Get(row, 3));
+}
+
+inline Vector4 Matrix4x4::GetColumn(int col) const
+{
+	return Vector4(Get(0, col), Get(1, col), Get(2, col), Get(3, col));
+}
+
+inline void Matrix4x4::SetAxisX(const Vector3& v)
+{
+	Get(0, 0) = v.X; Get(1, 0) = v.Y; Get(2, 0) = v.Z;
+}
+
+inline void Matrix4x4::SetAxisY(const Vector3& v)
+{
+	Get(0, 1) = v.X; Get(1, 1) = v.Y; Get(2, 1) = v.Z;
+}
+
+inline void Matrix4x4::SetAxisZ(const Vector3& v)
+{
+	Get(0, 2) = v.X; Get(1, 2) = v.Y; Get(2, 2) = v.Z;
+}
+
+inline void Matrix4x4::SetAxis(int axis, const Vector3& v)
+{
+	Get(0, axis) = v.X; Get(1, axis) = v.Y; Get(2, axis) = v.Z;
+}
+
+inline void Matrix4x4::SetPosition(const Vector3& v)
+{
+	Get(0, 3) = v.X; Get(1, 3) = v.Y; Get(2, 3) = v.Z;
+}
+
+inline void Matrix4x4::SetRow(int row, const Vector4& v)
+{
+	Get(row, 0) = v.X; Get(row, 1) = v.Y; Get(row, 2) = v.Z; Get(row, 3) = v.W;
+}
+
+inline void Matrix4x4::SetColumn(int col, const Vector4& v)
+{
+	Get(0, col) = v.X; Get(1, col) = v.Y; Get(2, col) = v.Z; Get(3, col) = v.W;
+}
+
+inline Vector3 Matrix4x4::MultiplyPoint3(const Vector3& v) const
+{
+	Vector3 res;
+	res.X = m_data[0] * v.X + m_data[4] * v.Y + m_data[8] * v.Z + m_data[12];
+	res.Y = m_data[1] * v.X + m_data[5] * v.Y + m_data[9] * v.Z + m_data[13];
+	res.Z = m_data[2] * v.X + m_data[6] * v.Y + m_data[10] * v.Z + m_data[14];
+	return res;
+}
+
+inline void Matrix4x4::MultiplyPoint3(const Vector3& v, Vector3& output) const
+{
+	output.X = m_data[0] * v.X + m_data[4] * v.Y + m_data[8] * v.Z + m_data[12];
+	output.Y = m_data[1] * v.X + m_data[5] * v.Y + m_data[9] * v.Z + m_data[13];
+	output.Z = m_data[2] * v.X + m_data[6] * v.Y + m_data[10] * v.Z + m_data[14];
+}
+
+inline Vector3 Matrix4x4::MultiplyVector3(const Vector3& v) const
+{
+	Vector3 res;
+	res.X = m_data[0] * v.X + m_data[4] * v.Y + m_data[8] * v.Z;
+	res.Y = m_data[1] * v.X + m_data[5] * v.Y + m_data[9] * v.Z;
+	res.Z = m_data[2] * v.X + m_data[6] * v.Y + m_data[10] * v.Z;
+	return res;
+}
+
+inline void Matrix4x4::MultiplyVector3(const Vector3& v, Vector3& output) const
+{
+	output.X = m_data[0] * v.X + m_data[4] * v.Y + m_data[8] * v.Z;
+	output.Y = m_data[1] * v.X + m_data[5] * v.Y + m_data[9] * v.Z;
+	output.Z = m_data[2] * v.X + m_data[6] * v.Y + m_data[10] * v.Z;
+}
+
+inline bool Matrix4x4::PerspectiveMultiplyPoint3(const Vector3& v, Vector3& output) const
+{
+	Vector3 res;
+	float w;
+	res.X = Get(0, 0) * v.X + Get(0, 1) * v.Y + Get(0, 2) * v.Z + Get(0, 3);
+	res.Y = Get(1, 0) * v.X + Get(1, 1) * v.Y + Get(1, 2) * v.Z + Get(1, 3);
+	res.Z = Get(2, 0) * v.X + Get(2, 1) * v.Y + Get(2, 2) * v.Z + Get(2, 3);
+	w = Get(3, 0) * v.X + Get(3, 1) * v.Y + Get(3, 2) * v.Z + Get(3, 3);
+	if (abs(w) > 1.0e-7f)
+	{
+		float invW = 1.0f / w;
+		output.X = res.X * invW;
+		output.Y = res.Y * invW;
+		output.Z = res.Z * invW;
+		return true;
+	}
+	else
+	{
+		output.X = 0.0f;
+		output.Y = 0.0f;
+		output.Z = 0.0f;
+		return false;
+	}
+}
+
+inline Vector4 Matrix4x4::MultiplyVector4(const Vector4& v) const
+{
+	Vector4 res;
+	MultiplyVector4(v, res);
+	return res;
+}
+
+inline void Matrix4x4::MultiplyVector4(const Vector4& v, Vector4& output) const
+{
+	output.X = m_data[0] * v.X + m_data[4] * v.Y + m_data[8] * v.Z + m_data[12] * v.W;
+	output.Y = m_data[1] * v.X + m_data[5] * v.Y + m_data[9] * v.Z + m_data[13] * v.W;
+	output.Z = m_data[2] * v.X + m_data[6] * v.Y + m_data[10] * v.Z + m_data[14] * v.W;
+	output.W = m_data[3] * v.X + m_data[7] * v.Y + m_data[11] * v.Z + m_data[15] * v.W;
+}
+
+inline bool Matrix4x4::PerspectiveMultiplyVector3(const Vector3& v, Vector3& output) const
+{
+	Vector3 res;
+	float w;
+	res.X = Get(0, 0) * v.X + Get(0, 1) * v.Y + Get(0, 2) * v.Z;
+	res.Y = Get(1, 0) * v.X + Get(1, 1) * v.Y + Get(1, 2) * v.Z;
+	res.Z = Get(2, 0) * v.X + Get(2, 1) * v.Y + Get(2, 2) * v.Z;
+	w = Get(3, 0) * v.X + Get(3, 1) * v.Y + Get(3, 2) * v.Z;
+	if (abs(w) > 1.0e-7f)
+	{
+		float invW = 1.0f / w;
+		output.X = res.X * invW;
+		output.Y = res.Y * invW;
+		output.Z = res.Z * invW;
+		return true;
+	}
+	else
+	{
+		output.X = 0.0f;
+		output.Y = 0.0f;
+		output.Z = 0.0f;
+		return false;
+	}
+}
+
+inline Vector3 Matrix4x4::InverseMultiplyPoint3Affine(const Vector3& inV) const
+{
+	Vector3 v(inV.X - Get(0, 3), inV.Y - Get(1, 3), inV.Z - Get(2, 3));
+	Vector3 res;
+	res.X = Get(0, 0) * v.X + Get(1, 0) * v.Y + Get(2, 0) * v.Z;
+	res.Y = Get(0, 1) * v.X + Get(1, 1) * v.Y + Get(2, 1) * v.Z;
+	res.Z = Get(0, 2) * v.X + Get(1, 2) * v.Y + Get(2, 2) * v.Z;
+	return res;
+}
+
+inline Vector3 Matrix4x4::InverseMultiplyVector3Affine(const Vector3& v) const
+{
+	Vector3 res;
+	res.X = Get(0, 0) * v.X + Get(1, 0) * v.Y + Get(2, 0) * v.Z;
+	res.Y = Get(0, 1) * v.X + Get(1, 1) * v.Y + Get(2, 1) * v.Z;
+	res.Z = Get(0, 2) * v.X + Get(1, 2) * v.Y + Get(2, 2) * v.Z;
+	return res;
+}
+
+inline bool IsFinite(const Matrix4x4& f)
+{
+	return
+		isfinite(f.m_data[0]) & isfinite(f.m_data[1]) & isfinite(f.m_data[2]) &
+		isfinite(f.m_data[4]) & isfinite(f.m_data[5]) & isfinite(f.m_data[6]) &
+		isfinite(f.m_data[8]) & isfinite(f.m_data[9]) & isfinite(f.m_data[10]) &
+		isfinite(f.m_data[12]) & isfinite(f.m_data[13]) & isfinite(f.m_data[14]) & isfinite(f.m_data[15]);
+}
+
 
 Matrix4x4::Matrix4x4(const float data[16])
 {
 	for (int i = 0; i < 16; i++)
-		m_Data[i] = data[i];
+		m_data[i] = data[i];
 }
 
 Matrix4x4::Matrix4x4(const Matrix3x3 &other)
 {
-	m_Data[0] = other.m_data[0];
-	m_Data[1] = other.m_data[1];
-	m_Data[2] = other.m_data[2];
-	m_Data[3] = 0.0F;
+	m_data[0] = other.m_data[0];
+	m_data[1] = other.m_data[1];
+	m_data[2] = other.m_data[2];
+	m_data[3] = 0.0F;
 
-	m_Data[4] = other.m_data[3];
-	m_Data[5] = other.m_data[4];
-	m_Data[6] = other.m_data[5];
-	m_Data[7] = 0.0F;
+	m_data[4] = other.m_data[3];
+	m_data[5] = other.m_data[4];
+	m_data[6] = other.m_data[5];
+	m_data[7] = 0.0F;
 
-	m_Data[8] = other.m_data[6];
-	m_Data[9] = other.m_data[7];
-	m_Data[10] = other.m_data[8];
-	m_Data[11] = 0.0F;
+	m_data[8] = other.m_data[6];
+	m_data[9] = other.m_data[7];
+	m_data[10] = other.m_data[8];
+	m_data[11] = 0.0F;
 
-	m_Data[12] = 0.0F;
-	m_Data[13] = 0.0F;
-	m_Data[14] = 0.0F;
-	m_Data[15] = 1.0F;
+	m_data[12] = 0.0F;
+	m_data[13] = 0.0F;
+	m_data[14] = 0.0F;
+	m_data[15] = 1.0F;
 }
 
 Matrix4x4& Matrix4x4::operator=(const Matrix3x3& other)
 {
-	m_Data[0] = other.m_data[0];
-	m_Data[1] = other.m_data[1];
-	m_Data[2] = other.m_data[2];
-	m_Data[3] = 0.0F;
+	m_data[0] = other.m_data[0];
+	m_data[1] = other.m_data[1];
+	m_data[2] = other.m_data[2];
+	m_data[3] = 0.0F;
 
-	m_Data[4] = other.m_data[3];
-	m_Data[5] = other.m_data[4];
-	m_Data[6] = other.m_data[5];
-	m_Data[7] = 0.0F;
+	m_data[4] = other.m_data[3];
+	m_data[5] = other.m_data[4];
+	m_data[6] = other.m_data[5];
+	m_data[7] = 0.0F;
 
-	m_Data[8] = other.m_data[6];
-	m_Data[9] = other.m_data[7];
-	m_Data[10] = other.m_data[8];
-	m_Data[11] = 0.0F;
+	m_data[8] = other.m_data[6];
+	m_data[9] = other.m_data[7];
+	m_data[10] = other.m_data[8];
+	m_data[11] = 0.0F;
 
-	m_Data[12] = 0.0F;
-	m_Data[13] = 0.0F;
-	m_Data[14] = 0.0F;
-	m_Data[15] = 1.0F;
+	m_data[12] = 0.0F;
+	m_data[13] = 0.0F;
+	m_data[14] = 0.0F;
+	m_data[15] = 1.0F;
 	return *this;
 }
 
@@ -114,16 +321,16 @@ void MultiplyMatrices3x4(const Matrix4x4& lhs, const Matrix4x4& rhs, Matrix4x4& 
 {
 	for (int i = 0; i < 3; i++)
 	{
-		res.m_Data[i] = lhs.m_Data[i] * rhs.m_Data[0] + lhs.m_Data[i + 4] * rhs.m_Data[1] + lhs.m_Data[i + 8] * rhs.m_Data[2];//  + lhs.m_Data[i+12] * rhs.m_Data[3];
-		res.m_Data[i + 4] = lhs.m_Data[i] * rhs.m_Data[4] + lhs.m_Data[i + 4] * rhs.m_Data[5] + lhs.m_Data[i + 8] * rhs.m_Data[6];//  + lhs.m_Data[i+12] * rhs.m_Data[7];
-		res.m_Data[i + 8] = lhs.m_Data[i] * rhs.m_Data[8] + lhs.m_Data[i + 4] * rhs.m_Data[9] + lhs.m_Data[i + 8] * rhs.m_Data[10];// + lhs.m_Data[i+12] * rhs.m_Data[11];
-		res.m_Data[i + 12] = lhs.m_Data[i] * rhs.m_Data[12] + lhs.m_Data[i + 4] * rhs.m_Data[13] + lhs.m_Data[i + 8] * rhs.m_Data[14] + lhs.m_Data[i + 12];// * rhs.m_Data[15];
+		res.m_data[i] = lhs.m_data[i] * rhs.m_data[0] + lhs.m_data[i + 4] * rhs.m_data[1] + lhs.m_data[i + 8] * rhs.m_data[2];//  + lhs.m_Data[i+12] * rhs.m_Data[3];
+		res.m_data[i + 4] = lhs.m_data[i] * rhs.m_data[4] + lhs.m_data[i + 4] * rhs.m_data[5] + lhs.m_data[i + 8] * rhs.m_data[6];//  + lhs.m_Data[i+12] * rhs.m_Data[7];
+		res.m_data[i + 8] = lhs.m_data[i] * rhs.m_data[8] + lhs.m_data[i + 4] * rhs.m_data[9] + lhs.m_data[i + 8] * rhs.m_data[10];// + lhs.m_Data[i+12] * rhs.m_Data[11];
+		res.m_data[i + 12] = lhs.m_data[i] * rhs.m_data[12] + lhs.m_data[i + 4] * rhs.m_data[13] + lhs.m_data[i + 8] * rhs.m_data[14] + lhs.m_data[i + 12];// * rhs.m_Data[15];
 	}
 
-	res.m_Data[3] = 0.0f;
-	res.m_Data[7] = 0.0f;
-	res.m_Data[11] = 0.0f;
-	res.m_Data[15] = 1.0f;
+	res.m_data[3] = 0.0f;
+	res.m_data[7] = 0.0f;
+	res.m_data[11] = 0.0f;
+	res.m_data[15] = 1.0f;
 }
 
 Matrix4x4& Matrix4x4::SetIdentity()
@@ -611,30 +818,30 @@ bool CompareApproximately(const Matrix4x4& lhs, const Matrix4x4& rhs, float dist
 void Matrix4x4::SetTR(const Vector3& pos, const Quaternionf& q)
 {
 	QuaternionToMatrix(q, *this);
-	m_Data[12] = pos[0];
-	m_Data[13] = pos[1];
-	m_Data[14] = pos[2];
+	m_data[12] = pos[0];
+	m_data[13] = pos[1];
+	m_data[14] = pos[2];
 }
 
 void Matrix4x4::SetTRS(const Vector3& pos, const Quaternionf& q, const Vector3& s)
 {
 	QuaternionToMatrix(q, *this);
 
-	m_Data[0] *= s[0];
-	m_Data[1] *= s[0];
-	m_Data[2] *= s[0];
+	m_data[0] *= s[0];
+	m_data[1] *= s[0];
+	m_data[2] *= s[0];
 
-	m_Data[4] *= s[1];
-	m_Data[5] *= s[1];
-	m_Data[6] *= s[1];
+	m_data[4] *= s[1];
+	m_data[5] *= s[1];
+	m_data[6] *= s[1];
 
-	m_Data[8] *= s[2];
-	m_Data[9] *= s[2];
-	m_Data[10] *= s[2];
+	m_data[8] *= s[2];
+	m_data[9] *= s[2];
+	m_data[10] *= s[2];
 
-	m_Data[12] = pos[0];
-	m_Data[13] = pos[1];
-	m_Data[14] = pos[2];
+	m_data[12] = pos[0];
+	m_data[13] = pos[1];
+	m_data[14] = pos[2];
 }
 
 void Matrix4x4::SetTRInverse(const Vector3& pos, const Quaternionf& q)
@@ -737,4 +944,66 @@ Vector3 Matrix4x4::GetLossyScale() const
 bool Matrix4x4::ValidTRS() const
 {
 	return Get(3, 0) == 0 && Get(3, 1) == 0 && Get(3, 2) == 0 && fabs(Get(3, 3)) == 1;
+}
+
+void MultiplyMatrices4x4(const Matrix4x4* __restrict lhs, const Matrix4x4* __restrict rhs, Matrix4x4* __restrict res)
+{
+	/* Assert(lhs != rhs && lhs != res && rhs != res); */
+	for (int i = 0; i < 4; i++)
+	{
+		res->m_data[i] = lhs->m_data[i] * rhs->m_data[0] + lhs->m_data[i + 4] * rhs->m_data[1] + lhs->m_data[i + 8] * rhs->m_data[2] + lhs->m_data[i + 12] * rhs->m_data[3];
+		res->m_data[i + 4] = lhs->m_data[i] * rhs->m_data[4] + lhs->m_data[i + 4] * rhs->m_data[5] + lhs->m_data[i + 8] * rhs->m_data[6] + lhs->m_data[i + 12] * rhs->m_data[7];
+		res->m_data[i + 8] = lhs->m_data[i] * rhs->m_data[8] + lhs->m_data[i + 4] * rhs->m_data[9] + lhs->m_data[i + 8] * rhs->m_data[10] + lhs->m_data[i + 12] * rhs->m_data[11];
+		res->m_data[i + 12] = lhs->m_data[i] * rhs->m_data[12] + lhs->m_data[i + 4] * rhs->m_data[13] + lhs->m_data[i + 8] * rhs->m_data[14] + lhs->m_data[i + 12] * rhs->m_data[15];
+	}
+}
+
+void TransposeMatrix4x4(const Matrix4x4* __restrict lhs, Matrix4x4* __restrict res)
+{
+	*res = *lhs;
+	std::swap(res->Get(0, 1), res->Get(1, 0));
+	std::swap(res->Get(0, 2), res->Get(2, 0));
+	std::swap(res->Get(0, 3), res->Get(3, 0));
+	std::swap(res->Get(1, 2), res->Get(2, 1));
+	std::swap(res->Get(1, 3), res->Get(3, 1));
+	std::swap(res->Get(2, 3), res->Get(3, 2));
+}
+
+void MultiplyMatrixArray4x4(const Matrix4x4* __restrict a, const Matrix4x4* __restrict b, Matrix4x4* __restrict res, size_t count)
+{
+	/*
+	Assert(a);
+	Assert(b);
+	Assert(res);
+	*/
+
+	for (size_t i = 0; i < count; ++i)
+	{
+		MultiplyMatrices4x4(a + i, b + i, res + i);
+	}
+}
+
+void MultiplyMatrixArrayWithBase4x4(const Matrix4x4* __restrict base,
+	const Matrix4x4* __restrict a, const Matrix4x4* __restrict b, Matrix4x4* __restrict res, size_t count)
+{
+	/*
+	Assert(base);
+	Assert(a);
+	Assert(b);
+	Assert(res);
+	*/
+
+	Matrix4x4 tmp;
+	for (size_t i = 0; i < count; ++i)
+	{
+		MultiplyMatrices4x4(base, a + i, &tmp);
+		MultiplyMatrices4x4(&tmp, b + i, res + i);
+	}
+}
+
+void CopyMatrix4x4(const float* __restrict lhs, float* __restrict res)
+{
+	/* Assert(lhs != rhs && lhs != res && rhs != res); */
+	for (int i = 0; i < 16; ++i)
+		res[i] = lhs[i];
 }

@@ -385,25 +385,25 @@ void QuaternionToMatrix(const Quaternionf& q, Matrix4x4& m)
 	float wz = q.w * z;
 
 	// Calculate 3x3 matrix from orthonormal basis
-	m.m_Data[0] = 1.0f - (yy + zz);
-	m.m_Data[1] = xy + wz;
-	m.m_Data[2] = xz - wy;
-	m.m_Data[3] = 0.0F;
+	m.m_data[0] = 1.0f - (yy + zz);
+	m.m_data[1] = xy + wz;
+	m.m_data[2] = xz - wy;
+	m.m_data[3] = 0.0F;
 
-	m.m_Data[4] = xy - wz;
-	m.m_Data[5] = 1.0f - (xx + zz);
-	m.m_Data[6] = yz + wx;
-	m.m_Data[7] = 0.0F;
+	m.m_data[4] = xy - wz;
+	m.m_data[5] = 1.0f - (xx + zz);
+	m.m_data[6] = yz + wx;
+	m.m_data[7] = 0.0F;
 
-	m.m_Data[8] = xz + wy;
-	m.m_Data[9] = yz - wx;
-	m.m_Data[10] = 1.0f - (xx + yy);
-	m.m_Data[11] = 0.0F;
+	m.m_data[8] = xz + wy;
+	m.m_data[9] = yz - wx;
+	m.m_data[10] = 1.0f - (xx + yy);
+	m.m_data[11] = 0.0F;
 
-	m.m_Data[12] = 0.0F;
-	m.m_Data[13] = 0.0F;
-	m.m_Data[14] = 0.0F;
-	m.m_Data[15] = 1.0F;
+	m.m_data[12] = 0.0F;
+	m.m_data[13] = 0.0F;
+	m.m_data[14] = 0.0F;
+	m.m_data[15] = 1.0F;
 }
 
 void MatrixToQuaternion(const Matrix4x4& m, Quaternionf& q)
