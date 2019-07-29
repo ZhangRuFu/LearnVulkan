@@ -17,6 +17,8 @@ class ESDevice : public GfxDevice
 private:
 	typedef std::map<const Mesh*, GLuint> VBOMap;
 	typedef std::map<const Mesh*, GLuint> VAOMap;
+	typedef std::map<const Mesh*, GLuint> EBOMap;
+	typedef std::map<const Shader*, GLuint> ShaderMap;
 
 private:
 	EGLDisplay m_eglDisplay;
@@ -40,19 +42,14 @@ private:
 	static const EGLint m_renderableType = EGL_OPENGL_ES3_BIT_KHR;
 	static const EGLint m_surfaceType = EGL_WINDOW_BIT;
 
-	//Mesh to vbo
 	/*
-		TODO : use Mesh ID!
-	*/
-	VBOMap m_meshToVBO;
-
-	//Mesh to vao
-	/*
+		TODO : use ID!
 		TODO : use share vao!
 	*/
-	VAOMap m_meshTOVAO;
-
-
+	VBOMap m_meshToVBO;
+	VAOMap m_meshToVAO;
+	EBOMap m_meshToEBO;
+	ShaderMap m_shaderMap;
 
 public:
 	ESDevice(EGLNativeWindowType nativeWindowType) { m_nativeWindowType = nativeWindowType; }

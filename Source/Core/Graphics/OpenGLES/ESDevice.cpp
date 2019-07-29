@@ -155,16 +155,29 @@ void ESDevice::DrawMesh(const Mesh & mesh, const Material & material)
 		//add vbo
 
 		//add vao
+
+		//add ebo
 	}
 
 	GLuint vbo = vboRes->second;
-	GLuint vao = m_meshTOVAO.find(&mesh)->second;
-	//GLuint ebo = ...
+	GLuint vao = m_meshToVAO.find(&mesh)->second;
+	GLuint ebo = m_meshToEBO.find(&mesh)->second;
+
+	//shader
+	ShaderMap::iterator shaderRes = m_shaderMap.find(&material.GetShader());
+	if (shaderRes == m_shaderMap.end())
+	{
+		//create shader
+
+		//add shader
+	}
+	GLuint shaderID = shaderRes->second;
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBindVertexArray(vao);
-	//glUseProgram()
+	glUseProgram(shaderID);
 	//glDrawElements()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	glUseProgram(0);
 }
