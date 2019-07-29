@@ -1,3 +1,6 @@
+#include "Core\Graphics\Mesh\Mesh.h"
+#include "Core\Graphics\Mesh\VertexAttribDescriptor.h"
+#include "Core\Graphics\Material.h"
 #include "Core\Graphics\OpenGLES\ESDevice.h"
 #include "Core\Log\Debug.h"
 
@@ -140,4 +143,28 @@ void ESDevice::SwapBuffer(void)
 	/*TODO : Swap Interval ?*/
 	//eglSwapInterval(m_eglDisplay, 1);
 	eglSwapBuffers(m_eglDisplay, m_eglSurface);
+}
+
+void ESDevice::DrawMesh(const Mesh & mesh, const Material & material)
+{
+	VBOMap::iterator vboRes = m_meshToVBO.find(&mesh);
+	if (vboRes == m_meshToVBO.end())
+	{
+		//create vertex attrib
+
+		//add vbo
+
+		//add vao
+	}
+
+	GLuint vbo = vboRes->second;
+	GLuint vao = m_meshTOVAO.find(&mesh)->second;
+	//GLuint ebo = ...
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBindVertexArray(vao);
+	//glUseProgram()
+	//glDrawElements()
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }

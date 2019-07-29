@@ -2,6 +2,7 @@
 #include "Core\WankelEngine.h"
 #include "Core\EngineLoop.h"
 #include "Core\Log\LogManager.h"
+#include "Core\Graphics\GraphicManager.h"
 
 template<class T>
 void WankelEngine<T>::OnInit()
@@ -12,6 +13,8 @@ void WankelEngine<T>::OnInit()
 	LogManager::Init();
 	m_logManager = LogManager::Instance();
 
+	GraphicManager::Init();
+	m_graphicManager = GraphicManager::Instance();
 }
 
 template<class T>
@@ -22,7 +25,7 @@ void WankelEngine<T>::OnDestroy()
 	
 	//Platform Indentdent Destroy
 	LogManager::Destroy();
-	
+	GraphicManager::Destroy();
 }
 
 template<class T>

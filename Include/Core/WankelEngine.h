@@ -4,7 +4,7 @@
 
 class EngineLoop;
 class LogManager;
-class GfxDevice;
+class GraphicManager;
 
 /*
  *
@@ -18,8 +18,9 @@ class WankelEngine : public Singleton<T>
 {
 protected:
 	EngineLoop* m_engineLoop;
+
 	LogManager* m_logManager;
-	GfxDevice* m_gfxDevice;
+	GraphicManager* m_graphicManager;
 
 public:
 	virtual void OnInit();

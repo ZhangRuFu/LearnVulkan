@@ -167,7 +167,8 @@ if not exist $(OutDir)log4cplus.dll copy $(SolutionDir)External\ARMES\lib\$(Plat
   <ItemGroup>
     <ClCompile Include="External\fmt\fmt-5.3.0\src\format.cc" />
     <ClCompile Include="External\fmt\fmt-5.3.0\src\posix.cc" />
-    <ClCompile Include="Include\Core\Graphics\Mesh\VertexAttribDescriptor.cpp" />
+    <ClCompile Include="Source\Core\Graphics\Mesh\VertexAttribDescriptor.cpp" />
+    <ClCompile Include="Source\Core\Graphics\GraphicManager.cpp" />
     <ClCompile Include="Source\Core\Graphics\Mesh\Mesh.cpp" />
     <ClCompile Include="Source\Core\Graphics\OpenGLES\ESDevice.cpp" />
     <ClCompile Include="Source\Core\Log\Debug.cpp" />
@@ -190,10 +191,13 @@ if not exist $(OutDir)log4cplus.dll copy $(SolutionDir)External\ARMES\lib\$(Plat
     <ClInclude Include="Include\Core\Common.h" />
     <ClInclude Include="Include\Core\Container\String.h" />
     <ClInclude Include="Include\Core\EngineLoop.h" />
+    <ClInclude Include="Include\Core\Graphics\GraphicManager.h" />
+    <ClInclude Include="Include\Core\Graphics\Material.h" />
     <ClInclude Include="Include\Core\Graphics\Mesh\Mesh.h" />
     <ClInclude Include="Include\Core\Graphics\Mesh\VertexAttribDescriptor.h" />
     <ClInclude Include="Include\Core\Graphics\OpenGLES\ESDevice.h" />
     <ClInclude Include="Include\Core\Graphics\GfxDevice.h" />
+    <ClInclude Include="Include\Core\Graphics\Shader.h" />
     <ClInclude Include="Include\Core\Log\Debug.h" />
     <ClInclude Include="Include\Core\Log\LogHandler.h" />
     <ClInclude Include="Include\Core\Log\LogManager.h" />

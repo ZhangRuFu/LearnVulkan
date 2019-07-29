@@ -1,8 +1,12 @@
 #pragma once
+#include <map>
+
+#include <EGL\egl.h>
+#include <EGL\eglext.h>
+#include <GLES3\gl3.h>
 
 #include "Core\Graphics\GfxDevice.h"
-#include "EGL\egl.h"
-#include "EGL\eglext.h"
+
 
 /*
 	OpenGLES Graphics API
@@ -10,6 +14,10 @@
 
 class ESDevice : public GfxDevice
 {
+private:
+	typedef std::map<const Mesh*, GLuint> VBOMap;
+	typedef std::map<const Mesh*, GLuint> VAOMap;
+
 private:
 	EGLDisplay m_eglDisplay;
 	EGLConfig m_eglConfig;
@@ -32,6 +40,19 @@ private:
 	static const EGLint m_renderableType = EGL_OPENGL_ES3_BIT_KHR;
 	static const EGLint m_surfaceType = EGL_WINDOW_BIT;
 
+	//Mesh to vbo
+	/*
+		TODO : use Mesh ID!
+	*/
+	VBOMap m_meshToVBO;
+
+	//Mesh to vao
+	/*
+		TODO : use share vao!
+	*/
+	VAOMap m_meshTOVAO;
+
+
 
 public:
 	ESDevice(EGLNativeWindowType nativeWindowType) { m_nativeWindowType = nativeWindowType; }
@@ -39,4 +60,5 @@ public:
 	virtual void Init();
 	virtual void Destroy();
 	virtual void SwapBuffer();
+	virtual void DrawMesh(const Mesh &mesh, const Material& material);
 };

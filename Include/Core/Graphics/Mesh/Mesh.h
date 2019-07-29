@@ -29,6 +29,9 @@ private:
 	std::vector<Vertex> m_vertices;
 	std::vector<unsigned int> m_indices;
 
+	//attrib description
+
+
 public:
 	Mesh(void) {};
 	Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);

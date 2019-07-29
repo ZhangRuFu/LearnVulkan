@@ -4,6 +4,9 @@
 	Í¼ÐÎAPI³éÏó
 */
 
+class Mesh;
+class Material;
+
 class GfxDevice
 {
 public:
@@ -11,5 +14,7 @@ public:
 	virtual void Destroy(void) = 0;
 
 	//swap double buffer
-	virtual void SwapBuffer() = 0;
+	virtual void SwapBuffer(void) = 0;
+
+	virtual void DrawMesh(const Mesh &mesh, const Material& material) = 0;
 };
