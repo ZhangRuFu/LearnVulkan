@@ -18,7 +18,17 @@ void GraphicManager::SetGfxDevice(GfxDevice * gfxDevice)
 	m_gfxDevice->Init();
 }
 
+void GraphicManager::Clear(void)
+{
+	m_gfxDevice->Clear();
+}
+
 void GraphicManager::DrawMesh(const Mesh & mesh, const Material & material)
 {
 	m_gfxDevice->DrawMesh(mesh, material);
+}
+
+void GraphicManager::SwapBuffer(void)
+{
+	m_gfxDevice->SwapBuffer();
 }

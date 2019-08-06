@@ -59,6 +59,7 @@ public:
 	virtual void Init();
 	virtual void Destroy();
 	virtual void SwapBuffer();
+	virtual void Clear();
 	virtual void DrawMesh(const Mesh &mesh, const Material& material);
 
 private:

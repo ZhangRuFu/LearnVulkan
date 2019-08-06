@@ -20,5 +20,8 @@ public:
 public:
 	void SetGfxDevice(GfxDevice* gfxDevice);
 
+	void Clear(void);
 	void DrawMesh(const Mesh& mesh, const Material& material);
+
+	void SwapBuffer(void);
 };

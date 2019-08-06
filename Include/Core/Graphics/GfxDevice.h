@@ -12,6 +12,7 @@ class GfxDevice
 public:
 	virtual void Init(void) = 0;
 	virtual void Destroy(void) = 0;
+	virtual void Clear(void) = 0;
 
 	//swap double buffer
 	virtual void SwapBuffer(void) = 0;

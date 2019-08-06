@@ -104,7 +104,8 @@
       <Command>if not exist $(OutDir)libEGL.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\libEGL.dll $(OutDir)libEGL.dll
 if not exist $(OutDir)libGLESv2.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\libGLESv2.dll $(OutDir)libGLESv2.dll
 if not exist $(OutDir)libMaliEmulator.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\libMaliEmulator.dll $(OutDir)libMaliEmulator.dll
-if not exist $(OutDir)log4cplus.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\log4cplus.dll $(OutDir)log4cplus.dll</Command>
+if not exist $(OutDir)log4cplus.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\log4cplus.dll $(OutDir)log4cplus.dll
+if not exist $(OutDir)openglessl xcopy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\openglessl $(OutDir)openglessl /e/y/i</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -127,6 +128,7 @@ if not exist $(OutDir)log4cplus.dll copy $(SolutionDir)External\ARMES\lib\$(Plat
 if not exist $(OutDir)libGLESv2.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\libGLESv2.dll $(OutDir)libGLESv2.dll
 if not exist $(OutDir)libMaliEmulator.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\libMaliEmulator.dll $(OutDir)libMaliEmulator.dll
 if not exist $(OutDir)log4cplus.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\log4cplus.dll $(OutDir)log4cplus.dll
+if not exist $(OutDir)openglessl xcopy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\openglessl $(OutDir)openglessl /e/y/i
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

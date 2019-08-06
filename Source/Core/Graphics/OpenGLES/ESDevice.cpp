@@ -148,6 +148,12 @@ void ESDevice::SwapBuffer(void)
 	eglSwapBuffers(m_eglDisplay, m_eglSurface);
 }
 
+void ESDevice::Clear()
+{
+	glClearColor(1, 0, 0, 1);
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
 void ESDevice::DrawMesh(const Mesh & mesh, const Material & material)
 {
 	GLuint resVBO = 0;
@@ -204,16 +210,23 @@ void ESDevice::DrawMesh(const Mesh & mesh, const Material & material)
 
 		for (int i = 0; i < vas.size(); ++i)
 		{
+			glEnableVertexAttribArray(i);
 			glVertexAttribPointer(i, vas[i].m_componentSize, typeTrans[(int)vas[i].m_attribType], false, stride, (void*)offset);
 			offset += vas[i].m_size;
 		}
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		
 		//ebo
 		GLuint ebo;
 		glGenBuffers(1, &ebo);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * mesh.GetIndexCount(), mesh.GetIndex().data(), GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		glBindVertexArray(vao);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+		glBindVertexArray(0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 		//add
@@ -251,13 +264,12 @@ void ESDevice::DrawMesh(const Mesh & mesh, const Material & material)
 	else
 		shaderID = shaderRes->second;
 
-	glBindBuffer(GL_ARRAY_BUFFER, resVBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resEBO);
 	glBindVertexArray(resVAO);
+	
 	glUseProgram(shaderID);
 	glDrawElements(GL_TRIANGLES, mesh.GetIndexCount(), GL_UNSIGNED_INT, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resEBO);
+	//glDrawArrays(GL_TRIANGLES, 0, mesh.GetVertexCount());
+
 	glBindVertexArray(0);
 	glUseProgram(0);
 }
@@ -278,7 +290,7 @@ GLuint ESDevice::CreateShader(const Shader & shader)
 	
 	GLint isSuccess = 0;
 	glGetShaderiv(vsID, GL_COMPILE_STATUS, &isSuccess);
-	if (isSuccess)
+	if (!isSuccess)
 	{
 		GLint infoLogLen = 0;
 		glGetShaderiv(vsID, GL_INFO_LOG_LENGTH, &infoLogLen);
@@ -300,7 +312,7 @@ GLuint ESDevice::CreateShader(const Shader & shader)
 	glCompileShader(fsID);
 
 	glGetShaderiv(fsID, GL_COMPILE_STATUS, &isSuccess);
-	if (isSuccess)
+	if (!isSuccess)
 	{
 		GLint infoLogLen = 0;
 		glGetShaderiv(fsID, GL_INFO_LOG_LENGTH, &infoLogLen);

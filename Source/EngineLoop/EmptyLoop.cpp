@@ -51,8 +51,10 @@ public:
 
 	virtual void Render()
 	{
+		GraphicManager::Instance()->Clear();
 		GraphicManager::Instance()->DrawMesh(*m_mesh, *m_mat);
 
+		GraphicManager::Instance()->SwapBuffer();
 	}
 };
 
