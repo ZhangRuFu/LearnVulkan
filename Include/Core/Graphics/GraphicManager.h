@@ -13,7 +13,7 @@ class GraphicManager : public Singleton<GraphicManager>
 private:
 	GfxDevice* m_gfxDevice;
 
-protected:
+public:
 	virtual void OnInit();
 	virtual void OnDestroy();
 

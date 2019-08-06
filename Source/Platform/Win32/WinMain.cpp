@@ -60,10 +60,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreinstance, LPSTR cmdLine, i
 			TranslateMessage(&message);
 			DispatchMessage(&message);
 		}
-		/*
 		else
 			gWankelEngine->OnUpdate();
-			*/
 	}
 
 	return static_cast<int>(message.wParam);

@@ -7,6 +7,8 @@
 
 #include "Core\Graphics\GfxDevice.h"
 
+class Mesh;
+class Shader;
 
 /*
 	OpenGLES Graphics API
@@ -58,4 +60,7 @@ public:
 	virtual void Destroy();
 	virtual void SwapBuffer();
 	virtual void DrawMesh(const Mesh &mesh, const Material& material);
+
+private:
+	GLuint CreateShader(const Shader &shader);
 };

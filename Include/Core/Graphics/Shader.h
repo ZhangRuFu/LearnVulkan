@@ -28,7 +28,7 @@ public:
 	Shader(String shaderPath);
 
 public:
-	String GetShaderPath(void) { return m_shaderPath; }
-	String GetVertexShaderSource(void) { return m_vertexShaderSource; };
-	String GetFragmentShaderSource(void) { return m_fragmentShaderSource; };
+	const String& GetShaderPath(void) const { return m_shaderPath; }
+	const String& GetVertexShaderSource(void) const { return m_vertexShaderSource; };
+	const String& GetFragmentShaderSource(void) const { return m_fragmentShaderSource; };
 };

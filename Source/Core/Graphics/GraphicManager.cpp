@@ -14,11 +14,11 @@ void GraphicManager::SetGfxDevice(GfxDevice * gfxDevice)
 {
 	if (m_gfxDevice == nullptr && gfxDevice != nullptr)
 		m_gfxDevice = gfxDevice;
+
+	m_gfxDevice->Init();
 }
 
 void GraphicManager::DrawMesh(const Mesh & mesh, const Material & material)
 {
-	
-
-
+	m_gfxDevice->DrawMesh(mesh, material);
 }

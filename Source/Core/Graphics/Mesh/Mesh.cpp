@@ -101,7 +101,7 @@ const Mesh* Mesh::InitBasicMesh(void)
 		0.5f, 0.0f, -0.5f,		0.0f, 1.0f, 0.0f,	5.0f, 5.0f,
 	};
 	int planeVertexGroupCount = sizeof(planeVertices) / (8 * 4);
-	std::vector<Vertex> planeVertex;
+	std::vector<Vertex> planeVertex(planeVertexGroupCount);
 	for (int i = 0; i < planeVertexGroupCount; i++)
 	{
 		Vertex vertex;
@@ -128,7 +128,7 @@ const Mesh* Mesh::InitBasicMesh(void)
 	int sphereVertexCount = thetaCount * betaCount;
 	thetaStep = Deg2Rad(thetaStep);
 	betaStep = Deg2Rad(betaStep);
-	std::vector<Vertex> sphereVertex;
+	std::vector<Vertex> sphereVertex(thetaCount * betaCount);
 
 	int sIndex = 0;
 	float theta = 0;

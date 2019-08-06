@@ -98,7 +98,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)External\ARMES\lib\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libEGL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libEGL.lib;libGLESv2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>if not exist $(OutDir)libEGL.dll copy $(SolutionDir)External\ARMES\lib\$(PlatformTarget)\libEGL.dll $(OutDir)libEGL.dll
@@ -168,7 +168,7 @@ if not exist $(OutDir)log4cplus.dll copy $(SolutionDir)External\ARMES\lib\$(Plat
     <ClCompile Include="External\fmt\fmt-5.3.0\src\format.cc" />
     <ClCompile Include="External\fmt\fmt-5.3.0\src\posix.cc" />
     <ClCompile Include="Source\Core\Graphics\Material.cpp" />
-    <ClCompile Include="Source\Core\Graphics\Mesh\VertexAttribDescriptor.cpp" />
+    <ClCompile Include="Source\Core\Graphics\Mesh\VertexAttribGenerator.cpp" />
     <ClCompile Include="Source\Core\Graphics\GraphicManager.cpp" />
     <ClCompile Include="Source\Core\Graphics\Mesh\Mesh.cpp" />
     <ClCompile Include="Source\Core\Graphics\OpenGLES\ESDevice.cpp" />
@@ -197,7 +197,7 @@ if not exist $(OutDir)log4cplus.dll copy $(SolutionDir)External\ARMES\lib\$(Plat
     <ClInclude Include="Include\Core\Graphics\GraphicManager.h" />
     <ClInclude Include="Include\Core\Graphics\Material.h" />
     <ClInclude Include="Include\Core\Graphics\Mesh\Mesh.h" />
-    <ClInclude Include="Include\Core\Graphics\Mesh\VertexAttribDescriptor.h" />
+    <ClInclude Include="Include\Core\Graphics\Mesh\VertexAttribGenerator.h" />
     <ClInclude Include="Include\Core\Graphics\OpenGLES\ESDevice.h" />
     <ClInclude Include="Include\Core\Graphics\GfxDevice.h" />
     <ClInclude Include="Include\Core\Graphics\Shader.h" />
