@@ -285,8 +285,6 @@ GLuint ESDevice::CreateShader(const Shader & shader)
 	GLint len = vsSource.size();
 	glShaderSource(vsID, 1, &source, &len);
 	glCompileShader(vsID);
-
-	//GL_INVALID_ENUM
 	
 	GLint isSuccess = 0;
 	glGetShaderiv(vsID, GL_COMPILE_STATUS, &isSuccess);
@@ -348,7 +346,7 @@ GLuint ESDevice::CreateShader(const Shader & shader)
 	//link success
 	//print shader info
 	Debug::Log(StringUtil::format("Shader : {0}, Information :", shader.GetShaderPath()));
-	Debug::Log("---------------v---------------");
+	Debug::Log("-------------------------------");
 	
 	GLint programArg = 0;
 	glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &programArg);
@@ -364,7 +362,10 @@ GLuint ESDevice::CreateShader(const Shader & shader)
 	glGetProgramiv(program, GL_ATTACHED_SHADERS, &programArg);
 	Debug::Log(StringUtil::format("Attach Shaders Count : {0}", programArg));
 
-	Debug::Log("---------------^---------------");
+	//glGetProgramiv(program, GL_PROGRAM_BINARY_LENGTH, &programArg);
+	//Debug::Log(StringUtil::format("Program Binary Length : {0}", programArg));
+
+	Debug::Log("-------------------------------");
 
 	return program;
 }
