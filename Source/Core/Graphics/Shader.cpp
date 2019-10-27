@@ -1,5 +1,5 @@
 #include "Core\Graphics\Shader.h"
-#include "Core\Misc\File.h"
+#include "Core\Resource\File.h"
 
 Shader::Shader(String shaderPath) : m_shaderPath(shaderPath)
 {
@@ -7,7 +7,7 @@ Shader::Shader(String shaderPath) : m_shaderPath(shaderPath)
 	
 	String fullShaderPath = shaderPath + ".vs";
 	
-	int len = File::ReadTextFile(fullShaderPath, m_vertexShaderSource);
+	int len = Resource::ReadTextFile(fullShaderPath, m_vertexShaderSource);
 	if (len == -1)
 	{
 		Debug::Error("Can not create vertex shader");
@@ -16,7 +16,7 @@ Shader::Shader(String shaderPath) : m_shaderPath(shaderPath)
 	
 	fullShaderPath.replace(fullShaderPath.find_last_of("vs") - 1, 2, "fs");
 
-	len = File::ReadTextFile(fullShaderPath, m_fragmentShaderSource);
+	len = Resource::ReadTextFile(fullShaderPath, m_fragmentShaderSource);
 	if (len == -1)
 	{
 		Debug::Error("Can not create fragment shader");

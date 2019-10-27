@@ -183,7 +183,7 @@ if not exist $(OutDir)openglessl xcopy $(SolutionDir)External\ARMES\lib\$(Platfo
     <ClCompile Include="Source\Core\Math\Vector2.cpp" />
     <ClCompile Include="Source\Core\Math\Vector3.cpp" />
     <ClCompile Include="Source\Core\Math\Vector4.cpp" />
-    <ClCompile Include="Source\Core\Misc\File.cpp" />
+    <ClCompile Include="Source\Core\Resource\File.cpp" />
     <ClCompile Include="Source\Core\Misc\Singleton.cpp" />
     <ClCompile Include="Source\Core\Time.cpp" />
     <ClCompile Include="Source\Core\WankelEngine.cpp" />
@@ -216,7 +216,7 @@ if not exist $(OutDir)openglessl xcopy $(SolutionDir)External\ARMES\lib\$(Platfo
     <ClInclude Include="Include\Core\Math\Vector3.h" />
     <ClInclude Include="Include\Core\Math\Vector4.h" />
     <ClInclude Include="Include\Core\Misc\EnumFlags.h" />
-    <ClInclude Include="Include\Core\Misc\File.h" />
+    <ClInclude Include="Include\Core\Resource\File.h" />
     <ClInclude Include="Include\Core\Misc\Singleton.h" />
     <ClInclude Include="Include\Core\Misc\Utility.h" />
     <ClInclude Include="Include\Core\Time\Time.h" />

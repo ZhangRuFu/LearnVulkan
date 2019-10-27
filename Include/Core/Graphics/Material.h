@@ -4,8 +4,8 @@ class Shader;
 class Matrix4x4;
 
 /*
-	²ÄÖÊ·â×°
-*/
+ *	Material
+ */
 
 class Material
 {

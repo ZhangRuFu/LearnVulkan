@@ -78,13 +78,13 @@
     <ClCompile Include="Source\Core\Graphics\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Misc\File.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Core\Graphics\Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Graphics\Mesh\VertexAttribGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Resource\File.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -176,10 +176,10 @@
     <ClInclude Include="Include\Core\Graphics\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Core\Misc\File.h">
+    <ClInclude Include="Include\Core\Graphics\Mesh\VertexAttribGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Core\Graphics\Mesh\VertexAttribGenerator.h">
+    <ClInclude Include="Include\Core\Resource\File.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

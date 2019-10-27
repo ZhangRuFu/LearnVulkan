@@ -7,7 +7,7 @@
 #include "Core\Container\String.h"
 
 /*
-	Shader 封装
+	Shader
 	TODO : Shader 资源管理
 */
 

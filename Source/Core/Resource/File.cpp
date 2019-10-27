@@ -1,6 +1,6 @@
-#include "Core\Misc\File.h"
+#include "Core\Resource\File.h"
 
-int File::ReadTextFile(String fileName, String& fileContent)
+int Resource::ReadTextFile(String fileName, String& fileContent)
 {
 	FILE *fp = nullptr;
 	errno_t result = fopen_s(&fp, fileName.c_str(), "r");

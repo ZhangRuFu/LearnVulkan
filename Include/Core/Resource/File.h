@@ -6,7 +6,7 @@
 	File Tool
 */
 
-class File
+class Resource
 {
 public:
 	static int ReadTextFile(String fileName, String& fileContent);
